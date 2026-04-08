@@ -7,16 +7,16 @@ import { Checkbox } from '@/components/ui/checkbox'
 
 export function TaskFormPreview() {
   return (
-    <div className="bg-white rounded-[var(--border-radius-large)] p-6 max-w-md border border-[var(--color-black-10)]">
-      <h3 className="text-lg font-bold text-[var(--color-black)] mb-4">Add task</h3>
+    <div className="bg-white rounded-[var(--border-radius-large)] p-6 max-w-md border border-[var(--color-black-10)] text-[var(--color-black)] [color-scheme:light]">
+      <h3 className="text-lg font-bold mb-4">Add task</h3>
       <div className="space-y-4">
         <div>
           <Label htmlFor="sg-title">Title</Label>
-          <Input id="sg-title" placeholder="Task title" className="mt-1" readOnly />
+          <Input id="sg-title" placeholder="Task title" className="mt-1 border-[#d0d0d0]" readOnly />
         </div>
         <div>
           <Label htmlFor="sg-description">Description</Label>
-          <Textarea id="sg-description" placeholder="Optional description" className="mt-1" readOnly />
+          <Textarea id="sg-description" placeholder="Optional description" className="mt-1 border-[#d0d0d0]" readOnly />
         </div>
         <div>
           <Label>Status</Label>

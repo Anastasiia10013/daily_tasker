@@ -159,7 +159,7 @@ Cards are always white — the background creates the contrast.
 ### Status Colors
 - Focus — `--color-yellow` (#f4c537) border/badge
 - Done — `--color-black-40` (#a1a0a0) muted + strikethrough
-- In-progress — `--color-blue` (#3051a8) left border
+- In-progress — `--color-sage-green` (#adbdaf) left border
 
 ### Typography
 ```

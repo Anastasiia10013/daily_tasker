@@ -37,7 +37,7 @@ const CARDS: CardData[] = [
 const borderClass: Record<CardVariant, string> = {
   focus: 'border-2 border-[var(--color-yellow)]',
   todo: 'border border-[var(--color-black-10)]',
-  'in-progress': 'border border-[var(--color-black-10)] border-l-4 border-l-[var(--color-blue)]',
+  'in-progress': 'border border-[var(--color-black-10)] border-l-4 border-l-[var(--color-sage-green)]',
   done: 'border border-[var(--color-black-10)] opacity-60',
 }
 
@@ -57,7 +57,7 @@ function TaskCard({ variant, title, description, rotation }: CardData) {
       <p className="text-sm text-[var(--color-black-60)] mt-1">{description}</p>
       <div className="mt-2 text-xs">
         {variant === 'in-progress' && (
-          <span className="text-[var(--color-blue)] font-medium">In progress</span>
+          <span className="text-[var(--color-sage-green)] font-medium">In progress</span>
         )}
         {variant === 'done' && <span className="text-[var(--color-black-40)]">Done</span>}
         {variant === 'todo' && <span className="text-[var(--color-black-40)]">Todo</span>}

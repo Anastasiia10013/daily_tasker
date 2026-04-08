@@ -32,8 +32,8 @@ const RADIUS_TOKENS = [
 
 export default function StyleGuidePage() {
   return (
-    <main className="max-w-5xl mx-auto px-8 py-12 bg-[var(--color-off-white)] min-h-screen">
-      <h1 className="text-4xl font-bold text-[var(--color-black)] mb-12">Style Guide</h1>
+    <main className="max-w-5xl mx-auto px-8 py-12 bg-background min-h-screen">
+      <h1 className="text-4xl font-bold text-foreground mb-12">Style Guide</h1>
 
       <Section id="colors" title="Colors">
         <div className="flex flex-wrap gap-6">
@@ -46,34 +46,34 @@ export default function StyleGuidePage() {
       <Section id="typography" title="Typography">
         <div className="space-y-4">
           <div>
-            <p className="text-xs text-[var(--color-black-40)] mb-1">H1 — text-4xl font-bold</p>
-            <h1 className="text-4xl font-bold text-[var(--color-black)]">Heading 1</h1>
+            <p className="text-xs text-muted-foreground mb-1">H1 — text-4xl font-bold</p>
+            <h1 className="text-4xl font-bold text-foreground">Heading 1</h1>
           </div>
           <div>
-            <p className="text-xs text-[var(--color-black-40)] mb-1">H2 — text-3xl font-bold</p>
-            <h2 className="text-3xl font-bold text-[var(--color-black)]">Heading 2</h2>
+            <p className="text-xs text-muted-foreground mb-1">H2 — text-3xl font-bold</p>
+            <h2 className="text-3xl font-bold text-foreground">Heading 2</h2>
           </div>
           <div>
-            <p className="text-xs text-[var(--color-black-40)] mb-1">H3 — text-2xl font-semibold</p>
-            <h3 className="text-2xl font-semibold text-[var(--color-black)]">Heading 3</h3>
+            <p className="text-xs text-muted-foreground mb-1">H3 — text-2xl font-semibold</p>
+            <h3 className="text-2xl font-semibold text-foreground">Heading 3</h3>
           </div>
           <div>
-            <p className="text-xs text-[var(--color-black-40)] mb-1">H4 — text-xl font-semibold</p>
-            <h4 className="text-xl font-semibold text-[var(--color-black)]">Heading 4</h4>
+            <p className="text-xs text-muted-foreground mb-1">H4 — text-xl font-semibold</p>
+            <h4 className="text-xl font-semibold text-foreground">Heading 4</h4>
           </div>
           <div>
-            <p className="text-xs text-[var(--color-black-40)] mb-1">Body — text-base</p>
-            <p className="text-base text-[var(--color-black)]">
+            <p className="text-xs text-muted-foreground mb-1">Body — text-base</p>
+            <p className="text-base text-foreground">
               Body text — the quick brown fox jumps over the lazy dog
             </p>
           </div>
           <div>
-            <p className="text-xs text-[var(--color-black-40)] mb-1">Small — text-sm</p>
-            <p className="text-sm text-[var(--color-black-60)]">Small text — secondary information</p>
+            <p className="text-xs text-muted-foreground mb-1">Small — text-sm</p>
+            <p className="text-sm text-muted-foreground">Small text — secondary information</p>
           </div>
           <div>
-            <p className="text-xs text-[var(--color-black-40)] mb-1">Mono — font-mono text-sm</p>
-            <code className="font-mono text-sm text-[var(--color-black)]">monospace — 2026-04-07</code>
+            <p className="text-xs text-muted-foreground mb-1">Mono — font-mono text-sm</p>
+            <code className="font-mono text-sm text-foreground">monospace — 2026-04-07</code>
           </div>
         </div>
       </Section>
@@ -108,15 +108,9 @@ export default function StyleGuidePage() {
       </Section>
 
       <Section id="theme-toggle" title="Theme Toggle">
-        <div className="flex gap-8">
-          <div className="flex flex-col items-center gap-2">
-            <ThemeToggle active={false} />
-            <p className="text-xs text-[var(--color-black-60)]">Light</p>
-          </div>
-          <div className="flex flex-col items-center gap-2">
-            <ThemeToggle active={true} />
-            <p className="text-xs text-[var(--color-black-60)]">Dark</p>
-          </div>
+        <div className="flex items-center gap-3">
+          <ThemeToggle />
+          <p className="text-xs text-[var(--color-black-60)]">Toggle dark / light mode</p>
         </div>
       </Section>
 

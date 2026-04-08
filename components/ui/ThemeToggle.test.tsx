@@ -1,12 +1,16 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, fireEvent } from '@testing-library/react'
 import { ThemeToggle } from './ThemeToggle'
 
-test('renders with aria-pressed false when inactive', () => {
-  render(<ThemeToggle active={false} />)
+test('renders with aria-pressed false by default', () => {
+  render(<ThemeToggle />)
   expect(screen.getByRole('button', { name: /toggle theme/i })).toHaveAttribute('aria-pressed', 'false')
 })
 
-test('renders with aria-pressed true when active', () => {
-  render(<ThemeToggle active={true} />)
-  expect(screen.getByRole('button', { name: /toggle theme/i })).toHaveAttribute('aria-pressed', 'true')
+test('toggles aria-pressed on click', () => {
+  render(<ThemeToggle />)
+  const button = screen.getByRole('button', { name: /toggle theme/i })
+  fireEvent.click(button)
+  expect(button).toHaveAttribute('aria-pressed', 'true')
+  fireEvent.click(button)
+  expect(button).toHaveAttribute('aria-pressed', 'false')
 })

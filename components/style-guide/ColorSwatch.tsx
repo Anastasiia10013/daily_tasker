@@ -10,7 +10,7 @@ export function ColorSwatch({ variable }: ColorSwatchProps) {
         className="w-16 h-16 rounded-[var(--border-radius)] border border-[var(--color-black-10)]"
         style={{ backgroundColor: `var(${variable})` }}
       />
-      <p className="text-xs font-mono text-[var(--color-black)]">{variable}</p>
+      <p className="text-xs font-mono text-foreground">{variable}</p>
     </div>
   )
 }
