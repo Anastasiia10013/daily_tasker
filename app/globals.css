@@ -7,19 +7,19 @@
 /* ─── Design Tokens ─────────────────────────────────────────── */
 :root {
   /* Colors */
-  --color-blue: #3051a8;
-  --color-green: #3f593d;
-  --color-sky: #90c0e6;
+  --color-green: #3a5740;
+  --color-sage-green: #adbdaf;
+  --color-tan: #b9aa8e;
+  --color-brown: #8b5b3d;
+  --color-dusty-rose: #d7b7b7;
+  --color-yellow: #d5b95c;
   --color-red: #d30423;
-  --color-yellow: #f4c537;
-  --color-sage-green: #d7d7c8;
-  --color-off-white: #f2f0e9;
+  --color-off-white: #f0ede4;
   --color-black: #141212;
   --color-black-60: #5b5959;
   --color-black-40: #a1a0a0;
   --color-black-10: #d0d0d0;
   --color-white: #ffffff;
-  --color-red-brick: #863a29;
 
   /* Border radius */
   --border-radius: 12px;
@@ -36,7 +36,7 @@
   --card-bg: var(--color-white);
   --text-muted: var(--color-black-60);
   --border: oklch(0.922 0 0);
-  --background: oklch(1 0 0);
+  --background: var(--color-off-white);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);

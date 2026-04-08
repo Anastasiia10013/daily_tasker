@@ -8,19 +8,19 @@ import { WeekNav } from '@/components/ui/WeekNav'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
 
 const COLOR_TOKENS = [
-  { name: 'blue', hex: '#3051a8', variable: '--color-blue' },
-  { name: 'green', hex: '#3f593d', variable: '--color-green' },
-  { name: 'sky', hex: '#90c0e6', variable: '--color-sky' },
-  { name: 'red', hex: '#d30423', variable: '--color-red' },
-  { name: 'yellow', hex: '#f4c537', variable: '--color-yellow' },
-  { name: 'sage-green', hex: '#d7d7c8', variable: '--color-sage-green' },
-  { name: 'off-white', hex: '#f2f0e9', variable: '--color-off-white' },
-  { name: 'black', hex: '#141212', variable: '--color-black' },
-  { name: 'black-60', hex: '#5b5959', variable: '--color-black-60' },
-  { name: 'black-40', hex: '#a1a0a0', variable: '--color-black-40' },
-  { name: 'black-10', hex: '#d0d0d0', variable: '--color-black-10' },
-  { name: 'white', hex: '#ffffff', variable: '--color-white' },
-  { name: 'red-brick', hex: '#863a29', variable: '--color-red-brick' },
+  { name: 'green', variable: '--color-green' },
+  { name: 'sage-green', variable: '--color-sage-green' },
+  { name: 'tan', variable: '--color-tan' },
+  { name: 'brown', variable: '--color-brown' },
+  { name: 'dusty-rose', variable: '--color-dusty-rose' },
+  { name: 'yellow', variable: '--color-yellow' },
+  { name: 'red', variable: '--color-red' },
+  { name: 'off-white', variable: '--color-off-white' },
+  { name: 'black', variable: '--color-black' },
+  { name: 'black-60', variable: '--color-black-60' },
+  { name: 'black-40', variable: '--color-black-40' },
+  { name: 'black-10', variable: '--color-black-10' },
+  { name: 'white', variable: '--color-white' },
 ]
 
 const RADIUS_TOKENS = [
