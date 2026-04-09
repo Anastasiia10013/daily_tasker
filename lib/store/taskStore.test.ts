@@ -65,6 +65,41 @@ describe('updateTask', () => {
     useTaskStore.getState().updateTask('nonexistent', { title: 'X' })
     expect(useTaskStore.getState().tasks).toEqual(before)
   })
+
+  it('strips isFocus when a done focus task moves to todo and 3 active focus tasks already exist', () => {
+    const store = useTaskStore.getState()
+    store.addTask({ title: 'F1', status: 'todo',  isFocus: true,  date: '2026-04-06' })
+    store.addTask({ title: 'F2', status: 'todo',  isFocus: true,  date: '2026-04-06' })
+    store.addTask({ title: 'F3', status: 'todo',  isFocus: true,  date: '2026-04-06' })
+    store.addTask({ title: 'F4', status: 'done',  isFocus: true,  date: '2026-04-06' })
+    const f4 = Object.values(useTaskStore.getState().tasks).find(t => t.title === 'F4')!
+    useTaskStore.getState().updateTask(f4.id, { status: 'todo' })
+    expect(useTaskStore.getState().tasks[f4.id].status).toBe('todo')
+    expect(useTaskStore.getState().tasks[f4.id].isFocus).toBe(false)
+  })
+
+  it('strips isFocus when a done focus task moves to in-progress and 3 active focus tasks already exist', () => {
+    const store = useTaskStore.getState()
+    store.addTask({ title: 'F1', status: 'in-progress', isFocus: true, date: '2026-04-06' })
+    store.addTask({ title: 'F2', status: 'in-progress', isFocus: true, date: '2026-04-06' })
+    store.addTask({ title: 'F3', status: 'todo',        isFocus: true, date: '2026-04-06' })
+    store.addTask({ title: 'F4', status: 'done',        isFocus: true, date: '2026-04-06' })
+    const f4 = Object.values(useTaskStore.getState().tasks).find(t => t.title === 'F4')!
+    useTaskStore.getState().updateTask(f4.id, { status: 'in-progress' })
+    expect(useTaskStore.getState().tasks[f4.id].status).toBe('in-progress')
+    expect(useTaskStore.getState().tasks[f4.id].isFocus).toBe(false)
+  })
+
+  it('preserves isFocus when a done focus task moves to todo and fewer than 3 active focus tasks exist', () => {
+    const store = useTaskStore.getState()
+    store.addTask({ title: 'F1', status: 'todo', isFocus: true, date: '2026-04-06' })
+    store.addTask({ title: 'F2', status: 'todo', isFocus: true, date: '2026-04-06' })
+    store.addTask({ title: 'F4', status: 'done', isFocus: true, date: '2026-04-06' })
+    const f4 = Object.values(useTaskStore.getState().tasks).find(t => t.title === 'F4')!
+    useTaskStore.getState().updateTask(f4.id, { status: 'todo' })
+    expect(useTaskStore.getState().tasks[f4.id].status).toBe('todo')
+    expect(useTaskStore.getState().tasks[f4.id].isFocus).toBe(true)
+  })
 })
 
 // ─── deleteTask ────────────────────────────────────────────────────────────

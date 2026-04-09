@@ -44,7 +44,18 @@ export const useTaskStore = create<TaskStore>()(
       updateTask: (id, changes) => {
         set(state => {
           if (!state.tasks[id]) return state
-          return { tasks: { ...state.tasks, [id]: { ...state.tasks[id], ...changes } } }
+          const task = state.tasks[id]
+          const updatedStatus = changes.status ?? task.status
+          const wasActive = task.status !== 'done'
+          const becomesActive = updatedStatus !== 'done'
+          let patch = { ...changes }
+          if (!wasActive && becomesActive && task.isFocus) {
+            const activeCount = Object.values(state.tasks).filter(
+              t => t.id !== id && t.isFocus && t.date === task.date && t.status !== 'done'
+            ).length
+            if (activeCount >= 3) patch = { ...patch, isFocus: false }
+          }
+          return { tasks: { ...state.tasks, [id]: { ...task, ...patch } } }
         })
       },
 
