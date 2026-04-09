@@ -38,13 +38,15 @@ describe('sortTasks', () => {
     expect(sorted[1].id).toBe('a')
   })
 
-  it('orders: focus → active → done', () => {
+  it('orders: focus → in-progress → todo → focus+done → done', () => {
     const tasks = [
       makeTask({ id: 'done', order: 0, status: 'done' }),
-      makeTask({ id: 'active', order: 1, status: 'in-progress' }),
-      makeTask({ id: 'focus', order: 2, isFocus: true }),
+      makeTask({ id: 'focus-done', order: 1, status: 'done', isFocus: true }),
+      makeTask({ id: 'todo', order: 2, status: 'todo' }),
+      makeTask({ id: 'in-progress', order: 3, status: 'in-progress' }),
+      makeTask({ id: 'focus', order: 4, isFocus: true }),
     ]
-    expect(sortTasks(tasks).map(t => t.id)).toEqual(['focus', 'active', 'done'])
+    expect(sortTasks(tasks).map(t => t.id)).toEqual(['focus', 'in-progress', 'todo', 'focus-done', 'done'])
   })
 
   it('preserves order within each group', () => {

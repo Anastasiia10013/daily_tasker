@@ -1,9 +1,10 @@
 import type { Task } from '@/types'
 
 function groupRank(task: Task): number {
+  if (task.status === 'done') return task.isFocus ? 3 : 4
   if (task.isFocus) return 0
-  if (task.status === 'done') return 2
-  return 1
+  if (task.status === 'in-progress') return 1
+  return 2 // todo
 }
 
 export function sortTasks(tasks: Task[]): Task[] {
