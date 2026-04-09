@@ -1,0 +1,114 @@
+import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
+import type { Task, TaskStatus } from '@/types'
+import { getWeekDates } from '@/lib/utils/dates'
+
+type AddTaskInput = {
+  title: string
+  description?: string
+  status: TaskStatus
+  isFocus: boolean
+  date: string
+}
+
+type TaskStore = {
+  tasks: Record<string, Task>
+  addTask: (input: AddTaskInput) => void
+  updateTask: (id: string, changes: Partial<Pick<Task, 'title' | 'description' | 'status' | 'isFocus' | 'date'>>) => void
+  deleteTask: (id: string) => void
+  toggleFocus: (id: string) => void
+  reorderTask: (date: string, activeId: string, overId: string) => void
+  moveTask: (id: string, newDate: string) => void
+  getTasksForWeek: (monday: string) => Task[]
+}
+
+export const useTaskStore = create<TaskStore>()(
+  persist(
+    (set, get) => ({
+      tasks: {},
+
+      addTask: (input) => {
+        const tasksForDate = Object.values(get().tasks).filter(t => t.date === input.date)
+        const maxOrder = tasksForDate.length > 0
+          ? Math.max(...tasksForDate.map(t => t.order))
+          : -1
+        const task: Task = {
+          id: crypto.randomUUID(),
+          ...input,
+          order: maxOrder + 1,
+          createdAt: new Date().toISOString(),
+        }
+        set(state => ({ tasks: { ...state.tasks, [task.id]: task } }))
+      },
+
+      updateTask: (id, changes) => {
+        set(state => {
+          if (!state.tasks[id]) return state
+          return { tasks: { ...state.tasks, [id]: { ...state.tasks[id], ...changes } } }
+        })
+      },
+
+      deleteTask: (id) => {
+        set(state => {
+          const { [id]: _, ...rest } = state.tasks
+          return { tasks: rest }
+        })
+      },
+
+      toggleFocus: (id) => {
+        const { tasks } = get()
+        const task = tasks[id]
+        if (!task) return
+        if (!task.isFocus) {
+          const focusCount = Object.values(tasks).filter(
+            t => t.isFocus && t.date === task.date && t.id !== id
+          ).length
+          if (focusCount >= 3) return
+        }
+        set(state => ({
+          tasks: { ...state.tasks, [id]: { ...state.tasks[id], isFocus: !state.tasks[id].isFocus } },
+        }))
+      },
+
+      reorderTask: (date, activeId, overId) => {
+        const dayTasks = Object.values(get().tasks)
+          .filter(t => t.date === date)
+          .sort((a, b) => a.order - b.order)
+
+        const activeIndex = dayTasks.findIndex(t => t.id === activeId)
+        const overIndex = dayTasks.findIndex(t => t.id === overId)
+        if (activeIndex === -1 || overIndex === -1) return
+
+        const reordered = [...dayTasks]
+        const [removed] = reordered.splice(activeIndex, 1)
+        reordered.splice(overIndex, 0, removed)
+
+        const updates: Record<string, Task> = {}
+        reordered.forEach((t, i) => {
+          updates[t.id] = { ...t, order: i }
+        })
+
+        set(state => ({ tasks: { ...state.tasks, ...updates } }))
+      },
+
+      moveTask: (id, newDate) => {
+        const { tasks } = get()
+        const task = tasks[id]
+        if (!task) return
+        const tasksForNewDate = Object.values(tasks).filter(t => t.date === newDate && t.id !== id)
+        const maxOrder = tasksForNewDate.length > 0
+          ? Math.max(...tasksForNewDate.map(t => t.order))
+          : -1
+        set(state => ({
+          tasks: { ...state.tasks, [id]: { ...state.tasks[id], date: newDate, order: maxOrder + 1 } },
+        }))
+      },
+
+      getTasksForWeek: (monday) => {
+        const weekDates = new Set(getWeekDates(monday))
+        return Object.values(get().tasks).filter(t => weekDates.has(t.date))
+      },
+    }),
+    { name: 'daily-tasker-tasks' }
+  )
+)
