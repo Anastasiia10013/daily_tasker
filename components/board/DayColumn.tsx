@@ -24,18 +24,33 @@ export function DayColumn({ date, tasks }: DayColumnProps) {
 
   const [open, setOpen] = useState(false)
   const [editTask, setEditTask] = useState<Task | null>(null)
+  const [focusErrorTaskId, setFocusErrorTaskId] = useState<string | null>(null)
 
-  const { deleteTask, updateTask } = useTaskStore()
+  const { deleteTask, updateTask, toggleFocus } = useTaskStore()
+
+  const focusCount = tasks.filter(t => t.isFocus).length
+  const focusLimitReached = focusCount >= 3
 
   const handleAdd = () => { setEditTask(null); setOpen(true) }
   const handleEdit = (task: Task) => { setEditTask(task); setOpen(true) }
   const handleDelete = (id: string) => deleteTask(id)
   const handleStatusChange = (id: string, status: TaskStatus) => updateTask(id, { status })
 
+  const handleToggleFocus = (id: string) => {
+    const task = tasks.find(t => t.id === id)
+    if (!task) return
+    if (!task.isFocus && focusLimitReached) {
+      setFocusErrorTaskId(id)
+      setTimeout(() => setFocusErrorTaskId(null), 2000)
+      return
+    }
+    toggleFocus(id)
+  }
+
   const sorted = sortTasks(tasks)
 
   return (
-    <div className="flex flex-col min-w-[200px]">
+    <div className="flex flex-col flex-1 min-w-[180px] max-w-[240px]">
       <DayHeader dayName={dayName} date={shortDate} onAdd={handleAdd} />
       <div className="flex flex-col gap-2 pt-2">
         {sorted.map((task, i) => (
@@ -48,7 +63,14 @@ export function DayColumn({ date, tasks }: DayColumnProps) {
               onEdit={handleEdit}
               onDelete={handleDelete}
               onStatusChange={handleStatusChange}
+              onToggleFocus={handleToggleFocus}
+              focusLimitReached={focusLimitReached}
             />
+            {focusErrorTaskId === task.id && (
+              <p className="text-xs text-[var(--color-red)] px-1 -mt-1">
+                Focus limit reached — max 3 per day
+              </p>
+            )}
           </React.Fragment>
         ))}
       </div>
@@ -57,6 +79,7 @@ export function DayColumn({ date, tasks }: DayColumnProps) {
         onClose={() => setOpen(false)}
         date={date}
         editTask={editTask ?? undefined}
+        focusLimitReached={focusLimitReached}
       />
     </div>
   )

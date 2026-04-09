@@ -16,15 +16,20 @@ interface TaskFormProps {
   onClose: () => void
   date: string
   editTask?: Task
+  focusLimitReached?: boolean
 }
 
-export function TaskForm({ open, onClose, date, editTask }: TaskFormProps) {
+export function TaskForm({ open, onClose, date, editTask, focusLimitReached = false }: TaskFormProps) {
   const { addTask, updateTask, deleteTask } = useTaskStore()
 
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [status, setStatus] = useState<TaskStatus>('todo')
   const [isFocus, setIsFocus] = useState(false)
+  const [focusFormError, setFocusFormError] = useState(false)
+
+  // Checkbox is blocked when limit is reached and this task isn't already a focus task
+  const focusCheckboxBlocked = focusLimitReached && !(editTask?.isFocus === true)
 
   useEffect(() => {
     if (editTask) {
@@ -38,7 +43,18 @@ export function TaskForm({ open, onClose, date, editTask }: TaskFormProps) {
       setStatus('todo')
       setIsFocus(false)
     }
+    setFocusFormError(false)
   }, [editTask, open])
+
+  const handleFocusChange = (checked: boolean) => {
+    if (checked && focusCheckboxBlocked) {
+      setFocusFormError(true)
+      setTimeout(() => setFocusFormError(false), 2000)
+      return
+    }
+    setFocusFormError(false)
+    setIsFocus(checked === true)
+  }
 
   const handleSave = () => {
     if (!title.trim()) return
@@ -112,13 +128,26 @@ export function TaskForm({ open, onClose, date, editTask }: TaskFormProps) {
             </Select>
           </div>
 
-          <div className="flex items-center gap-2">
-            <Checkbox
-              id="task-focus"
-              checked={isFocus}
-              onCheckedChange={checked => setIsFocus(checked === true)}
-            />
-            <Label htmlFor="task-focus">Focus task</Label>
+          <div>
+            <div className="flex items-center gap-2">
+              <Checkbox
+                id="task-focus"
+                checked={isFocus}
+                onCheckedChange={handleFocusChange}
+                className={focusCheckboxBlocked ? 'opacity-40 cursor-not-allowed' : ''}
+              />
+              <Label
+                htmlFor="task-focus"
+                className={focusCheckboxBlocked ? 'opacity-40 cursor-not-allowed' : ''}
+              >
+                Focus task
+              </Label>
+            </div>
+            {focusFormError && (
+              <p className="text-xs text-[var(--color-red)] mt-1">
+                Focus limit reached — unfocus another task first
+              </p>
+            )}
           </div>
         </div>
 

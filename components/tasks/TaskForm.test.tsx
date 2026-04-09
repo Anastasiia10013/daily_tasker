@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen, fireEvent, act } from '@testing-library/react'
 import { vi } from 'vitest'
 import { TaskForm } from './TaskForm'
 import { useTaskStore } from '@/lib/store/taskStore'
@@ -92,4 +92,37 @@ test('Cancel button calls onClose without saving', () => {
   fireEvent.click(screen.getByRole('button', { name: 'Cancel' }))
   expect(onClose).toHaveBeenCalled()
   expect(Object.values(useTaskStore.getState().tasks)).toHaveLength(0)
+})
+
+// ─── Focus limit enforcement ───────────────────────────────────────────────
+
+test('focus checkbox shows error when clicked at limit in add mode', () => {
+  render(<TaskForm open={true} onClose={() => {}} date="2026-04-07" focusLimitReached={true} />)
+  fireEvent.click(screen.getByRole('checkbox'))
+  expect(screen.getByText('Focus limit reached — unfocus another task first')).toBeInTheDocument()
+})
+
+test('focus checkbox does not toggle when blocked at limit', () => {
+  render(<TaskForm open={true} onClose={() => {}} date="2026-04-07" focusLimitReached={true} />)
+  const checkbox = screen.getByRole('checkbox')
+  fireEvent.click(checkbox)
+  expect(checkbox).not.toBeChecked()
+})
+
+test('focus checkbox error auto-clears after 2 seconds', async () => {
+  vi.useFakeTimers()
+  render(<TaskForm open={true} onClose={() => {}} date="2026-04-07" focusLimitReached={true} />)
+  fireEvent.click(screen.getByRole('checkbox'))
+  expect(screen.getByText('Focus limit reached — unfocus another task first')).toBeInTheDocument()
+  await act(async () => { vi.advanceTimersByTime(2000) })
+  expect(screen.queryByText('Focus limit reached — unfocus another task first')).not.toBeInTheDocument()
+  vi.useRealTimers()
+})
+
+test('focus checkbox is not blocked when editing an existing focus task', () => {
+  const focusTask: Task = { ...EDIT_TASK, isFocus: true }
+  render(<TaskForm open={true} onClose={() => {}} date="2026-04-07" editTask={focusTask} focusLimitReached={true} />)
+  const checkbox = screen.getByRole('checkbox')
+  fireEvent.click(checkbox)
+  expect(screen.queryByText('Focus limit reached — unfocus another task first')).not.toBeInTheDocument()
 })

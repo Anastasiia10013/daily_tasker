@@ -1,6 +1,6 @@
 "use client"
 
-import { Trash2 } from 'lucide-react'
+import { Crosshair, Trash2 } from 'lucide-react'
 import { StatusDropdown } from './StatusDropdown'
 import type { Task, TaskStatus } from '@/types'
 
@@ -23,33 +23,56 @@ interface TaskCardProps {
   onEdit: (task: Task) => void
   onDelete: (id: string) => void
   onStatusChange: (id: string, status: TaskStatus) => void
+  onToggleFocus: (id: string) => void
+  focusLimitReached: boolean
 }
 
-export function TaskCard({ task, onEdit, onDelete, onStatusChange }: TaskCardProps) {
+export function TaskCard({ task, onEdit, onDelete, onStatusChange, onToggleFocus, focusLimitReached }: TaskCardProps) {
   const variant = task.isFocus ? 'focus' : task.status
+  const focusMuted = !task.isFocus && focusLimitReached
 
   return (
     <div
       data-testid="task-card"
-      className={`relative bg-white rounded-[var(--border-radius)] p-4 cursor-pointer task-card ${BORDER_CLASS[variant]} ${task.status === 'done' ? 'opacity-50' : ''}`}
+      className={`bg-white rounded-[var(--border-radius)] p-4 cursor-pointer task-card ${BORDER_CLASS[variant]} ${task.status === 'done' ? 'opacity-50' : ''}`}
       style={{ '--tilt': getTilt(task.id) } as React.CSSProperties}
       onClick={() => onEdit(task)}
     >
-      <button
-        aria-label="Delete task"
-        className="absolute top-3 right-3 text-[var(--color-black-40)] hover:text-[var(--color-red)] transition-colors"
-        onClick={e => { e.stopPropagation(); onDelete(task.id) }}
-      >
-        <Trash2 size={14} />
-      </button>
+      {/* Top row: [crosshair + badge clickable area] [→] [delete] */}
+      <div className="flex items-center gap-2 mb-2">
+        <div
+          role="button"
+          aria-label="Toggle focus"
+          className={`flex items-center gap-1.5 ${focusMuted ? 'cursor-default' : 'cursor-pointer'}`}
+          onClick={e => { e.stopPropagation(); onToggleFocus(task.id) }}
+        >
+          <Crosshair
+            size={14}
+            className={`flex-shrink-0 transition-colors ${
+              task.isFocus
+                ? 'text-[var(--color-yellow)]'
+                : focusMuted
+                  ? 'text-[var(--color-black-10)]'
+                  : 'text-[var(--color-black-40)]'
+            }`}
+          />
+          {task.isFocus && (
+            <span className="bg-[var(--color-yellow)] text-[var(--color-black)] text-xs font-bold px-2 py-0.5 rounded">
+              Focus
+            </span>
+          )}
+        </div>
 
-      {task.isFocus && (
-        <span className="inline-block bg-[var(--color-yellow)] text-[var(--color-black)] text-xs font-bold px-2 py-0.5 rounded mb-2">
-          Focus
-        </span>
-      )}
+        <button
+          aria-label="Delete task"
+          className="ml-auto flex-shrink-0 text-[var(--color-black-40)] hover:text-[var(--color-red)] transition-colors"
+          onClick={e => { e.stopPropagation(); onDelete(task.id) }}
+        >
+          <Trash2 size={14} />
+        </button>
+      </div>
 
-      <p className={`font-medium text-[var(--color-black)] pr-6 ${task.status === 'done' ? 'line-through' : ''}`}>
+      <p className={`font-medium text-[var(--color-black)] break-words ${task.status === 'done' ? 'line-through' : ''}`}>
         {task.title}
       </p>
 

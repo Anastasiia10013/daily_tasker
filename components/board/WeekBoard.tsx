@@ -17,14 +17,16 @@ export function WeekBoard({ dates, monday }: WeekBoardProps) {
   const tasks = useTaskStore(useShallow(s => s.getTasksForWeek(monday)))
 
   return (
-    <div className="flex gap-4 overflow-x-auto px-4 pb-4 flex-1">
-      {mounted && dates.map(date => (
-        <DayColumn
-          key={date}
-          date={date}
-          tasks={tasks.filter(t => t.date === date)}
-        />
-      ))}
+    <div className="flex-1 overflow-x-auto">
+      <div className="flex gap-4 px-4 pb-4 mx-auto max-w-[1680px] min-w-fit h-full">
+        {mounted && dates.map(date => (
+          <DayColumn
+            key={date}
+            date={date}
+            tasks={tasks.filter(t => t.date === date)}
+          />
+        ))}
+      </div>
     </div>
   )
 }
