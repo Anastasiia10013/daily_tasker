@@ -104,7 +104,7 @@ export default function StyleGuidePage() {
       </Section>
 
       <Section id="week-nav" title="Week Navigation">
-        <WeekNav label="Apr 7–13, 2026" />
+        <WeekNav label="Apr 7–13, 2026" prevHref="/week/2026-03-30" nextHref="/week/2026-04-13" />
       </Section>
 
       <Section id="theme-toggle" title="Theme Toggle">
