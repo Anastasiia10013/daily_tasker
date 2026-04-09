@@ -31,7 +31,7 @@ export default async function WeekPage(props: PageProps<'/week/[date]'>) {
           nextHref={`/week/${nextMonday}`}
         />
       </header>
-      <WeekBoard dates={weekDates} tasks={[]} />
+      <WeekBoard dates={weekDates} monday={monday} />
     </div>
   )
 }

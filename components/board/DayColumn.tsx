@@ -1,13 +1,19 @@
+"use client"
+
+import React, { useState } from 'react'
 import { DayHeader } from './DayHeader'
+import { TaskCard } from '@/components/tasks/TaskCard'
+import { TaskForm } from '@/components/tasks/TaskForm'
+import { useTaskStore } from '@/lib/store/taskStore'
 import { sortTasks } from '@/lib/utils/tasks'
-import type { Task } from '@/types'
+import type { Task, TaskStatus } from '@/types'
 
 const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
 interface DayColumnProps {
-  date: string   // YYYY-MM-DD
-  tasks: Task[]  // pre-filtered for this date
+  date: string
+  tasks: Task[]
 }
 
 export function DayColumn({ date, tasks }: DayColumnProps) {
@@ -16,18 +22,42 @@ export function DayColumn({ date, tasks }: DayColumnProps) {
   const dayName = DAY_NAMES[dateObj.getDay()]
   const shortDate = `${MONTHS[m - 1]} ${d}`
 
+  const [open, setOpen] = useState(false)
+  const [editTask, setEditTask] = useState<Task | null>(null)
+
+  const { deleteTask, updateTask } = useTaskStore()
+
+  const handleAdd = () => { setEditTask(null); setOpen(true) }
+  const handleEdit = (task: Task) => { setEditTask(task); setOpen(true) }
+  const handleDelete = (id: string) => deleteTask(id)
+  const handleStatusChange = (id: string, status: TaskStatus) => updateTask(id, { status })
+
   const sorted = sortTasks(tasks)
 
   return (
     <div className="flex flex-col min-w-[200px]">
-      <DayHeader dayName={dayName} date={shortDate} />
+      <DayHeader dayName={dayName} date={shortDate} onAdd={handleAdd} />
       <div className="flex flex-col gap-2 pt-2">
-        {sorted.map(task => (
-          <div key={task.id} data-testid="task-placeholder" className="p-2 bg-white rounded border border-[var(--color-black-10)] text-sm">
-            {task.title}
-          </div>
+        {sorted.map((task, i) => (
+          <React.Fragment key={task.id}>
+            {i > 0 && task.status === 'done' && sorted[i - 1].status !== 'done' && (
+              <hr className="border-[var(--color-black-10)] my-2" />
+            )}
+            <TaskCard
+              task={task}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+              onStatusChange={handleStatusChange}
+            />
+          </React.Fragment>
         ))}
       </div>
+      <TaskForm
+        open={open}
+        onClose={() => setOpen(false)}
+        date={date}
+        editTask={editTask ?? undefined}
+      />
     </div>
   )
 }

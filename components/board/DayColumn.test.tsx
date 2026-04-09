@@ -1,6 +1,11 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, fireEvent } from '@testing-library/react'
 import { DayColumn } from './DayColumn'
+import { useTaskStore } from '@/lib/store/taskStore'
 import type { Task } from '@/types'
+
+beforeEach(() => {
+  useTaskStore.setState({ tasks: {} })
+})
 
 const BASE: Omit<Task, 'id' | 'title' | 'order'> = {
   description: undefined,
@@ -16,21 +21,28 @@ test('renders day name and formatted date', () => {
   expect(screen.getByText('Apr 7')).toBeInTheDocument()
 })
 
-test('renders tasks sorted: focus → active → done', () => {
+test('renders tasks sorted: focus → in-progress → todo → done', () => {
   const tasks: Task[] = [
     { ...BASE, id: '1', title: 'Done task', order: 0, status: 'done' },
     { ...BASE, id: '2', title: 'Focus task', order: 1, isFocus: true },
-    { ...BASE, id: '3', title: 'Active task', order: 2 },
+    { ...BASE, id: '3', title: 'Todo task', order: 2, status: 'todo' },
+    { ...BASE, id: '4', title: 'In progress task', order: 3, status: 'in-progress' },
   ]
   render(<DayColumn date="2026-04-07" tasks={tasks} />)
-  const items = screen.getAllByTestId('task-placeholder')
-  expect(items[0]).toHaveTextContent('Focus task')
-  expect(items[1]).toHaveTextContent('Active task')
-  expect(items[2]).toHaveTextContent('Done task')
+  const cards = screen.getAllByTestId('task-card')
+  expect(cards[0]).toHaveTextContent('Focus task')
+  expect(cards[1]).toHaveTextContent('In progress task')
+  expect(cards[2]).toHaveTextContent('Todo task')
+  expect(cards[3]).toHaveTextContent('Done task')
 })
 
-test('renders nothing for tasks on a different date', () => {
-  // DayColumn receives pre-filtered tasks, so this just verifies empty renders fine
+test('renders nothing when tasks array is empty', () => {
   render(<DayColumn date="2026-04-07" tasks={[]} />)
-  expect(screen.queryByTestId('task-placeholder')).not.toBeInTheDocument()
+  expect(screen.queryByTestId('task-card')).not.toBeInTheDocument()
+})
+
+test('clicking Add task button opens the task form dialog', () => {
+  render(<DayColumn date="2026-04-07" tasks={[]} />)
+  fireEvent.click(screen.getByRole('button', { name: /add task/i }))
+  expect(screen.getByRole('dialog')).toBeInTheDocument()
 })
