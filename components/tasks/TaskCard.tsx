@@ -1,6 +1,5 @@
 "use client"
 
-import { useState } from 'react'
 import { Trash2 } from 'lucide-react'
 import { StatusDropdown } from './StatusDropdown'
 import type { Task, TaskStatus } from '@/types'
@@ -27,20 +26,14 @@ interface TaskCardProps {
 }
 
 export function TaskCard({ task, onEdit, onDelete, onStatusChange }: TaskCardProps) {
-  const [hovered, setHovered] = useState(false)
   const variant = task.isFocus ? 'focus' : task.status
 
   return (
     <div
       data-testid="task-card"
-      className={`relative bg-white rounded-[var(--border-radius)] p-4 cursor-pointer ${BORDER_CLASS[variant]} ${task.status === 'done' ? 'opacity-50' : ''}`}
-      style={{
-        transform: hovered ? `rotate(${getTilt(task.id)})` : 'rotate(0deg)',
-        transition: 'transform 250ms ease',
-      }}
+      className={`relative bg-white rounded-[var(--border-radius)] p-4 cursor-pointer task-card ${BORDER_CLASS[variant]} ${task.status === 'done' ? 'opacity-50' : ''}`}
+      style={{ '--tilt': getTilt(task.id) } as React.CSSProperties}
       onClick={() => onEdit(task)}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
     >
       <button
         aria-label="Delete task"

@@ -173,6 +173,14 @@ body {
   padding: 0;
 }
 
+/* ─── Task Card Tilt ─────────────────────────────────────────── */
+.task-card {
+  transition: transform 250ms ease;
+}
+.task-card:hover {
+  transform: rotate(var(--tilt));
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
