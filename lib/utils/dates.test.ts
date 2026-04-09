@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest'
-import { getMonday, getWeekDates, formatDate } from '@/lib/utils/dates'
+import { describe, it, expect, test } from 'vitest'
+import { getMonday, getWeekDates, formatDate, formatWeekLabel } from '@/lib/utils/dates'
 
 describe('getMonday', () => {
   it('returns Monday when given a Wednesday', () => {
@@ -47,5 +47,17 @@ describe('formatDate', () => {
 
   it('formats a date at month end correctly', () => {
     expect(formatDate('2026-04-12')).toBe('Sun Apr 12')
+  })
+})
+
+describe('formatWeekLabel', () => {
+  test('same-month week', () => {
+    // 2026-04-06 is Monday Apr 6; week ends Apr 12
+    expect(formatWeekLabel('2026-04-06')).toBe('Apr 6–12, 2026')
+  })
+
+  test('cross-month week', () => {
+    // 2026-03-30 is Monday Mar 30; week ends Apr 5
+    expect(formatWeekLabel('2026-03-30')).toBe('Mar 30 – Apr 5, 2026')
   })
 })

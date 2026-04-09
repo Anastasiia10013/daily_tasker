@@ -34,6 +34,18 @@ export function getWeekDates(monday: string): string[] {
   })
 }
 
+export function formatWeekLabel(monday: string): string {
+  const dates = getWeekDates(monday)
+  const [, fm, fd] = dates[0].split('-').map(Number)
+  const [ly, lm, ld] = dates[6].split('-').map(Number)
+  const firstMonthName = MONTHS[fm - 1]
+  const lastMonthName = MONTHS[lm - 1]
+  if (fm === lm) {
+    return `${firstMonthName} ${fd}–${ld}, ${ly}`
+  }
+  return `${firstMonthName} ${fd} – ${lastMonthName} ${ld}, ${ly}`
+}
+
 export function formatDate(date: string): string {
   const [year, month, day] = date.split('-').map(Number)
   const d = new Date(year, month - 1, day)
