@@ -42,10 +42,9 @@ export function TaskCard({ task, onEdit, onDelete, onStatusChange, onToggleFocus
   const variant = task.isFocus ? 'focus' : task.status
   const focusMuted = !task.isFocus && focusLimitReached
 
-  const style = {
+  const dragStyle = {
     transform: CSS.Transform.toString(transform),
     transition,
-    '--tilt': getTilt(task.id),
   } as React.CSSProperties
 
   return (
@@ -53,9 +52,13 @@ export function TaskCard({ task, onEdit, onDelete, onStatusChange, onToggleFocus
       ref={setNodeRef}
       {...attributes}
       {...listeners}
+      style={dragStyle}
+      className={isDragging ? 'opacity-30' : undefined}
+    >
+    <div
       data-testid="task-card"
-      className={`bg-white rounded-[var(--border-radius)] p-4 cursor-grab active:cursor-grabbing task-card ${BORDER_CLASS[variant]} ${task.status === 'done' ? 'opacity-50' : ''} ${isDragging ? 'opacity-30' : ''}`}
-      style={style}
+      className={`bg-white rounded-[var(--border-radius)] p-4 cursor-grab active:cursor-grabbing task-card ${BORDER_CLASS[variant]} ${task.status === 'done' ? 'opacity-50' : ''}`}
+      style={{ '--tilt': getTilt(task.id) } as React.CSSProperties}
       onClick={() => onEdit(task)}
     >
       {/* Top row: [crosshair + badge] [delete] */}
@@ -108,5 +111,6 @@ export function TaskCard({ task, onEdit, onDelete, onStatusChange, onToggleFocus
         <StatusDropdown taskId={task.id} status={task.status} onStatusChange={onStatusChange} />
       </div>
     </div>
+  </div>
   )
 }

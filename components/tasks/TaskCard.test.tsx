@@ -136,3 +136,14 @@ test('focus toggle area has cursor-pointer when limit not reached', () => {
   renderCard({ task: BASE_TASK, ...DEFAULT_PROPS, focusLimitReached: false })
   expect(screen.getByLabelText('Toggle focus')).toHaveClass('cursor-pointer')
 })
+
+// ─── Hover animation structure ────────────────────────────────────────────────
+
+test('dnd-kit drag attributes are on the outer wrapper, not the inner card element', () => {
+  renderCard({ task: BASE_TASK, ...DEFAULT_PROPS })
+  const card = screen.getByTestId('task-card')
+  // dnd-kit spreads aria-roledescription="sortable" on the draggable element.
+  // It must be on the outer wrapper so the inner card's CSS :hover transform is never
+  // overridden by dnd-kit's inline transform style.
+  expect(card).not.toHaveAttribute('aria-roledescription', 'sortable')
+})
