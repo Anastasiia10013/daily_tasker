@@ -1,5 +1,14 @@
 import { render, screen, fireEvent } from '@testing-library/react'
+import { ThemeProvider } from 'next-themes'
 import { ThemeToggle } from './ThemeToggle'
+
+function renderWithTheme(defaultTheme = 'light') {
+  return render(
+    <ThemeProvider attribute="class" defaultTheme={defaultTheme} enableSystem={false}>
+      <ThemeToggle />
+    </ThemeProvider>
+  )
+}
 
 beforeEach(() => {
   localStorage.clear()
@@ -7,12 +16,12 @@ beforeEach(() => {
 })
 
 test('renders with aria-pressed false by default', () => {
-  render(<ThemeToggle />)
+  renderWithTheme()
   expect(screen.getByRole('button', { name: /toggle theme/i })).toHaveAttribute('aria-pressed', 'false')
 })
 
 test('sets aria-pressed true and saves dark to localStorage on click', () => {
-  render(<ThemeToggle />)
+  renderWithTheme()
   const button = screen.getByRole('button', { name: /toggle theme/i })
   fireEvent.click(button)
   expect(button).toHaveAttribute('aria-pressed', 'true')
@@ -20,7 +29,7 @@ test('sets aria-pressed true and saves dark to localStorage on click', () => {
 })
 
 test('toggles back to light and saves light to localStorage on second click', () => {
-  render(<ThemeToggle />)
+  renderWithTheme()
   const button = screen.getByRole('button', { name: /toggle theme/i })
   fireEvent.click(button)
   fireEvent.click(button)

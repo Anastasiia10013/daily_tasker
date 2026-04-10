@@ -90,11 +90,11 @@ export function WeekBoard({ dates, monday }: WeekBoardProps) {
     >
       <div className="flex-1 overflow-x-auto">
         <div className="flex gap-4 px-4 pb-4 mx-auto max-w-[1680px] min-w-fit h-full">
-          {mounted && dates.map(date => (
+          {dates.map(date => (
             <DayColumn
               key={date}
               date={date}
-              tasks={tasks.filter(t => t.date === date)}
+              tasks={mounted ? tasks.filter(t => t.date === date) : []}
               isDropTarget={hoveredDate === date}
             />
           ))}
@@ -120,3 +120,4 @@ export function WeekBoard({ dates, monday }: WeekBoardProps) {
     </DndContext>
   )
 }
+

@@ -1,14 +1,20 @@
 'use client'
 
-import { useTheme } from '@/lib/hooks/useTheme'
+import { useTheme } from 'next-themes'
+import { useEffect, useState } from 'react'
 
 export function ThemeToggle() {
+  const [mounted, setMounted] = useState(false)
   const { theme, setTheme } = useTheme()
+
+  useEffect(() => setMounted(true), [])
+
+  if (!mounted) return null
+
   const isDark = theme === 'dark'
 
   return (
     <button
-      suppressHydrationWarning
       onClick={() => setTheme(isDark ? 'light' : 'dark')}
       aria-pressed={isDark}
       aria-label="Toggle theme"

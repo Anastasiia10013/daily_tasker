@@ -10,6 +10,7 @@ interface WeekNavProps {
 export function WeekNav({ label, prevHref, nextHref }: WeekNavProps) {
   return (
     <div className="flex items-center gap-3">
+      <span className="text-sm font-medium text-foreground">{label}</span>
       <div className="flex items-center gap-0.5">
         <Link
           href={prevHref}
@@ -26,7 +27,6 @@ export function WeekNav({ label, prevHref, nextHref }: WeekNavProps) {
           <ChevronRight size={20} />
         </Link>
       </div>
-      <span className="text-sm font-medium text-foreground">{label}</span>
     </div>
   )
 }
