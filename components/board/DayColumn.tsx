@@ -1,6 +1,8 @@
 "use client"
 
 import React, { useState } from 'react'
+import { useDroppable } from '@dnd-kit/core'
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { DayHeader } from './DayHeader'
 import { TaskCard } from '@/components/tasks/TaskCard'
 import { TaskForm } from '@/components/tasks/TaskForm'
@@ -27,6 +29,7 @@ export function DayColumn({ date, tasks }: DayColumnProps) {
   const [focusErrorTaskId, setFocusErrorTaskId] = useState<string | null>(null)
 
   const { deleteTask, updateTask, toggleFocus } = useTaskStore()
+  const { setNodeRef } = useDroppable({ id: date })
 
   const focusCount = tasks.filter(t => t.isFocus).length
   const focusLimitReached = focusCount >= 3
@@ -52,28 +55,30 @@ export function DayColumn({ date, tasks }: DayColumnProps) {
   return (
     <div className="flex flex-col flex-1 min-w-[180px] max-w-[240px]">
       <DayHeader dayName={dayName} date={shortDate} onAdd={handleAdd} />
-      <div className="flex flex-col gap-2 pt-2">
-        {sorted.map((task, i) => (
-          <React.Fragment key={task.id}>
-            {i > 0 && task.status === 'done' && sorted[i - 1].status !== 'done' && (
-              <hr className="border-[var(--color-black-10)] my-2" />
-            )}
-            <TaskCard
-              task={task}
-              onEdit={handleEdit}
-              onDelete={handleDelete}
-              onStatusChange={handleStatusChange}
-              onToggleFocus={handleToggleFocus}
-              focusLimitReached={focusLimitReached}
-            />
-            {focusErrorTaskId === task.id && (
-              <p className="text-xs text-[var(--color-red)] px-1 -mt-1">
-                Focus limit reached — max 3 per day
-              </p>
-            )}
-          </React.Fragment>
-        ))}
-      </div>
+      <SortableContext items={sorted.map(t => t.id)} strategy={verticalListSortingStrategy}>
+        <div ref={setNodeRef} className="flex flex-col gap-2 pt-2 flex-1">
+          {sorted.map((task, i) => (
+            <React.Fragment key={task.id}>
+              {i > 0 && task.status === 'done' && sorted[i - 1].status !== 'done' && (
+                <hr className="border-[var(--color-black-10)] my-2" />
+              )}
+              <TaskCard
+                task={task}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+                onStatusChange={handleStatusChange}
+                onToggleFocus={handleToggleFocus}
+                focusLimitReached={focusLimitReached}
+              />
+              {focusErrorTaskId === task.id && (
+                <p className="text-xs text-[var(--color-red)] px-1 -mt-1">
+                  Focus limit reached — max 3 per day
+                </p>
+              )}
+            </React.Fragment>
+          ))}
+        </div>
+      </SortableContext>
       <TaskForm
         open={open}
         onClose={() => setOpen(false)}

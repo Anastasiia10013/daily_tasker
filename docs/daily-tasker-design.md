@@ -186,7 +186,7 @@ font-feature-settings: "ss02" on
 | M4 | Board Skeleton | WeekBoard + 7 DayColumns, static tasks |
 | M5 | Task CRUD | TaskCard, TaskForm, store wired, localStorage working |
 | M6 | Focus Tasks | toggleFocus, 3-task limit, yellow accent |
-| M7 | Drag & Drop | dnd-kit, reorder within day, move between days |
+| M7 | Drag & Drop | dnd-kit, reorder within column (done-boundary enforced), move between days (focus-strip if needed) |
 | M8 | Theme | dark/light toggle, persisted |
 | M9 | E2E Tests | Playwright, 6 key user flows |
 
