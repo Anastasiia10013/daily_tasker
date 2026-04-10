@@ -1,26 +1,18 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useTheme } from '@/lib/hooks/useTheme'
 
 export function ThemeToggle() {
-  const [isDark, setIsDark] = useState(false)
-
-  useEffect(() => {
-    setIsDark(document.documentElement.classList.contains('dark'))
-  }, [])
-
-  function toggle() {
-    const next = !isDark
-    setIsDark(next)
-    document.documentElement.classList.toggle('dark', next)
-  }
+  const { theme, setTheme } = useTheme()
+  const isDark = theme === 'dark'
 
   return (
     <button
-      onClick={toggle}
+      suppressHydrationWarning
+      onClick={() => setTheme(isDark ? 'light' : 'dark')}
       aria-pressed={isDark}
       aria-label="Toggle theme"
-      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-[var(--duration-default)] ${
+      className={`relative inline-flex h-6 w-11 cursor-pointer items-center rounded-full transition-colors duration-[var(--duration-default)] ${
         isDark ? 'bg-[var(--color-black-60)]' : 'bg-[var(--color-black-10)]'
       }`}
     >

@@ -104,13 +104,12 @@ export default function StyleGuidePage() {
       </Section>
 
       <Section id="week-nav" title="Week Navigation">
-        <WeekNav label="Apr 7–13, 2026" prevHref="/week/2026-03-30" nextHref="/week/2026-04-13" />
-      </Section>
-
-      <Section id="theme-toggle" title="Theme Toggle">
-        <div className="flex items-center gap-3">
-          <ThemeToggle />
-          <p className="text-xs text-[var(--color-black-60)]">Toggle dark / light mode</p>
+        <div className="flex items-center justify-between px-4 py-3 border border-[var(--color-black-10)] rounded-[var(--border-radius)] max-w-xl">
+          <span className="text-lg font-bold text-foreground">Daily Tasker</span>
+          <div className="flex items-center gap-4">
+            <WeekNav label="Apr 7–13, 2026" prevHref="/week/2026-03-30" nextHref="/week/2026-04-13" />
+            <ThemeToggle />
+          </div>
         </div>
       </Section>
 
