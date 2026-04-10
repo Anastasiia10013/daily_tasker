@@ -9,19 +9,19 @@ export function TaskFormPreview() {
   return (
     <div className="bg-white rounded-[var(--border-radius-large)] p-6 max-w-md border border-[var(--color-black-10)] text-[var(--color-black)] [color-scheme:light]">
       <h3 className="text-lg font-bold mb-4">Add task</h3>
-      <div className="space-y-4">
+      <div className="space-y-4 pointer-events-none">
         <div>
           <Label htmlFor="sg-title">Title</Label>
-          <Input id="sg-title" placeholder="Task title" className="mt-1 border-[#d0d0d0]" readOnly />
+          <Input id="sg-title" placeholder="Task title" className="mt-1" readOnly />
         </div>
         <div>
           <Label htmlFor="sg-description">Description</Label>
-          <Textarea id="sg-description" placeholder="Optional description" className="mt-1 border-[#d0d0d0]" readOnly />
+          <Textarea id="sg-description" placeholder="Optional description" className="mt-1" readOnly />
         </div>
         <div>
           <Label>Status</Label>
-          <Select disabled>
-            <SelectTrigger className="mt-1">
+          <Select>
+            <SelectTrigger className="mt-1 w-full">
               <SelectValue placeholder="Todo" />
             </SelectTrigger>
             <SelectContent>
@@ -32,7 +32,7 @@ export function TaskFormPreview() {
           </Select>
         </div>
         <div className="flex items-center gap-2">
-          <Checkbox id="sg-focus" disabled />
+          <Checkbox id="sg-focus" />
           <Label htmlFor="sg-focus">Focus task</Label>
         </div>
         <div className="flex gap-2 pt-2">
