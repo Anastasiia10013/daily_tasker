@@ -5,11 +5,14 @@ import {
   DndContext,
   DragOverlay,
   closestCenter,
+  pointerWithin,
   PointerSensor,
   useSensor,
   useSensors,
   type DragStartEvent,
   type DragEndEvent,
+  type DragOverEvent,
+  type CollisionDetection,
 } from '@dnd-kit/core'
 import { DayColumn } from './DayColumn'
 import { useTaskStore } from '@/lib/store/taskStore'
@@ -31,6 +34,12 @@ export function WeekBoard({ dates, monday }: WeekBoardProps) {
   const moveTask = useTaskStore(s => s.moveTask)
 
   const [activeTask, setActiveTask] = useState<Task | null>(null)
+  const [hoveredDate, setHoveredDate] = useState<string | null>(null)
+
+  const collisionDetection: CollisionDetection = (args) => {
+    const pointer = pointerWithin(args)
+    return pointer.length > 0 ? pointer : closestCenter(args)
+  }
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } })
@@ -40,8 +49,16 @@ export function WeekBoard({ dates, monday }: WeekBoardProps) {
     setActiveTask(tasks.find(t => t.id === active.id) ?? null)
   }
 
+  const handleDragOver = ({ over }: DragOverEvent) => {
+    if (!over) { setHoveredDate(null); return }
+    const overId = over.id as string
+    const overTask = tasks.find(t => t.id === overId)
+    setHoveredDate(overTask ? overTask.date : overId)
+  }
+
   const handleDragEnd = ({ active, over }: DragEndEvent) => {
     setActiveTask(null)
+    setHoveredDate(null)
     if (!over || active.id === over.id) return
 
     const activeId = active.id as string
@@ -66,8 +83,9 @@ export function WeekBoard({ dates, monday }: WeekBoardProps) {
   return (
     <DndContext
       sensors={sensors}
-      collisionDetection={closestCenter}
+      collisionDetection={collisionDetection}
       onDragStart={handleDragStart}
+      onDragOver={handleDragOver}
       onDragEnd={handleDragEnd}
     >
       <div className="flex-1 overflow-x-auto">
@@ -77,6 +95,7 @@ export function WeekBoard({ dates, monday }: WeekBoardProps) {
               key={date}
               date={date}
               tasks={tasks.filter(t => t.date === date)}
+              isDropTarget={hoveredDate === date}
             />
           ))}
         </div>

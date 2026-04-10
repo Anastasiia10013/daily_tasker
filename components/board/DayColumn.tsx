@@ -16,9 +16,10 @@ const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', '
 interface DayColumnProps {
   date: string
   tasks: Task[]
+  isDropTarget?: boolean
 }
 
-export function DayColumn({ date, tasks }: DayColumnProps) {
+export function DayColumn({ date, tasks, isDropTarget = false }: DayColumnProps) {
   const [y, m, d] = date.split('-').map(Number)
   const dateObj = new Date(y, m - 1, d)
   const dayName = DAY_NAMES[dateObj.getDay()]
@@ -53,10 +54,10 @@ export function DayColumn({ date, tasks }: DayColumnProps) {
   const sorted = sortTasks(tasks)
 
   return (
-    <div className="flex flex-col flex-1 min-w-[180px] max-w-[240px]">
+    <div ref={setNodeRef} className={`flex flex-col flex-1 min-w-[180px] max-w-[240px] rounded-[var(--border-radius)] transition-colors duration-150 ${isDropTarget ? 'bg-[var(--color-black-10)]/40' : ''}`}>
       <DayHeader dayName={dayName} date={shortDate} onAdd={handleAdd} />
       <SortableContext items={sorted.map(t => t.id)} strategy={verticalListSortingStrategy}>
-        <div ref={setNodeRef} className="flex flex-col gap-2 pt-2 flex-1">
+        <div className="flex flex-col gap-2 pt-2 flex-1">
           {sorted.map((task, i) => (
             <React.Fragment key={task.id}>
               {i > 0 && task.status === 'done' && sorted[i - 1].status !== 'done' && (

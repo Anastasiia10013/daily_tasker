@@ -84,3 +84,7 @@ type Task = {
 1. Focus tasks (`isFocus: true`) — top, yellow accent
 2. Active tasks (`todo` | `in-progress`) — middle
 3. Done tasks — always sink to bottom
+
+### Additional rulles
+1. After implementing each milestone group changes by logic to 2-3 commits, write commit title and concise structured description with bullets
+2. Implement milestones in inline session, do not suggest and use subagents and worktrees for implementing milestones
