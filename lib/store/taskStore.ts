@@ -82,23 +82,21 @@ export const useTaskStore = create<TaskStore>()(
       },
 
       reorderTask: (date, activeId, overId) => {
-        const dayTasks = Object.values(get().tasks)
-          .filter(t => t.date === date)
+        const { tasks } = get()
+        const activeTask = tasks[activeId]
+        if (!activeTask) return
+        const isDone = activeTask.status === 'done'
+        const zoneTasks = Object.values(tasks)
+          .filter(t => t.date === date && (isDone ? t.status === 'done' : t.status !== 'done'))
           .sort((a, b) => a.order - b.order)
-
-        const activeIndex = dayTasks.findIndex(t => t.id === activeId)
-        const overIndex = dayTasks.findIndex(t => t.id === overId)
+        const activeIndex = zoneTasks.findIndex(t => t.id === activeId)
+        const overIndex = zoneTasks.findIndex(t => t.id === overId)
         if (activeIndex === -1 || overIndex === -1) return
-
-        const reordered = [...dayTasks]
+        const reordered = [...zoneTasks]
         const [removed] = reordered.splice(activeIndex, 1)
         reordered.splice(overIndex, 0, removed)
-
         const updates: Record<string, Task> = {}
-        reordered.forEach((t, i) => {
-          updates[t.id] = { ...t, order: i }
-        })
-
+        reordered.forEach((t, i) => { updates[t.id] = { ...t, order: i } })
         set(state => ({ tasks: { ...state.tasks, ...updates } }))
       },
 
@@ -110,8 +108,10 @@ export const useTaskStore = create<TaskStore>()(
         const maxOrder = tasksForNewDate.length > 0
           ? Math.max(...tasksForNewDate.map(t => t.order))
           : -1
+        const focusCount = tasksForNewDate.filter(t => t.isFocus).length
+        const isFocus = task.isFocus && focusCount < 3
         set(state => ({
-          tasks: { ...state.tasks, [id]: { ...state.tasks[id], date: newDate, order: maxOrder + 1 } },
+          tasks: { ...state.tasks, [id]: { ...state.tasks[id], date: newDate, order: maxOrder + 1, isFocus } }
         }))
       },
 

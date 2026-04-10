@@ -18,14 +18,14 @@ describe('sortTasks', () => {
     expect(sortTasks([])).toEqual([])
   })
 
-  it('puts focus tasks before non-focus tasks', () => {
+  it('sorts non-done tasks by order, regardless of isFocus', () => {
     const tasks = [
       makeTask({ id: 'a', order: 0, isFocus: false }),
       makeTask({ id: 'b', order: 1, isFocus: true }),
     ]
     const sorted = sortTasks(tasks)
-    expect(sorted[0].id).toBe('b')
-    expect(sorted[1].id).toBe('a')
+    expect(sorted[0].id).toBe('a')
+    expect(sorted[1].id).toBe('b')
   })
 
   it('puts done tasks after active tasks', () => {
@@ -38,7 +38,7 @@ describe('sortTasks', () => {
     expect(sorted[1].id).toBe('a')
   })
 
-  it('orders: focus → in-progress → todo → focus+done → done', () => {
+  it('puts all non-done tasks before done tasks, sorted by order within each zone', () => {
     const tasks = [
       makeTask({ id: 'done', order: 0, status: 'done' }),
       makeTask({ id: 'focus-done', order: 1, status: 'done', isFocus: true }),
@@ -46,7 +46,7 @@ describe('sortTasks', () => {
       makeTask({ id: 'in-progress', order: 3, status: 'in-progress' }),
       makeTask({ id: 'focus', order: 4, isFocus: true }),
     ]
-    expect(sortTasks(tasks).map(t => t.id)).toEqual(['focus', 'in-progress', 'todo', 'focus-done', 'done'])
+    expect(sortTasks(tasks).map(t => t.id)).toEqual(['todo', 'in-progress', 'focus', 'done', 'focus-done'])
   })
 
   it('preserves order within each group', () => {

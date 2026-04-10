@@ -201,6 +201,20 @@ describe('reorderTask', () => {
     useTaskStore.getState().reorderTask('2026-04-06', 'bad-id', 'also-bad')
     expect(useTaskStore.getState().tasks).toEqual(before)
   })
+
+  it('only reorders tasks within the same zone — done task orders are not affected', () => {
+    const store = useTaskStore.getState()
+    store.addTask({ title: 'A', status: 'todo', isFocus: false, date: '2026-04-06' })
+    store.addTask({ title: 'B', status: 'todo', isFocus: false, date: '2026-04-06' })
+    store.addTask({ title: 'Done', status: 'done', isFocus: false, date: '2026-04-06' })
+    const all = Object.values(useTaskStore.getState().tasks)
+    const a = all.find(t => t.title === 'A')!
+    const b = all.find(t => t.title === 'B')!
+    const done = all.find(t => t.title === 'Done')!
+    const doneOrderBefore = done.order
+    useTaskStore.getState().reorderTask('2026-04-06', b.id, a.id)
+    expect(useTaskStore.getState().tasks[done.id].order).toBe(doneOrderBefore)
+  })
 })
 
 // ─── moveTask ──────────────────────────────────────────────────────────────
@@ -227,6 +241,27 @@ describe('moveTask', () => {
     const before = { ...useTaskStore.getState().tasks }
     useTaskStore.getState().moveTask('nonexistent', '2026-04-07')
     expect(useTaskStore.getState().tasks).toEqual(before)
+  })
+
+  it('strips isFocus when the destination day already has 3 focus tasks', () => {
+    const store = useTaskStore.getState()
+    store.addTask({ title: 'F1', status: 'todo', isFocus: true, date: '2026-04-07' })
+    store.addTask({ title: 'F2', status: 'todo', isFocus: true, date: '2026-04-07' })
+    store.addTask({ title: 'F3', status: 'todo', isFocus: true, date: '2026-04-07' })
+    store.addTask({ title: 'Moving', status: 'todo', isFocus: true, date: '2026-04-06' })
+    const moving = Object.values(useTaskStore.getState().tasks).find(t => t.title === 'Moving')!
+    useTaskStore.getState().moveTask(moving.id, '2026-04-07')
+    expect(useTaskStore.getState().tasks[moving.id].isFocus).toBe(false)
+  })
+
+  it('preserves isFocus when the destination day has fewer than 3 focus tasks', () => {
+    const store = useTaskStore.getState()
+    store.addTask({ title: 'F1', status: 'todo', isFocus: true, date: '2026-04-07' })
+    store.addTask({ title: 'F2', status: 'todo', isFocus: true, date: '2026-04-07' })
+    store.addTask({ title: 'Moving', status: 'todo', isFocus: true, date: '2026-04-06' })
+    const moving = Object.values(useTaskStore.getState().tasks).find(t => t.title === 'Moving')!
+    useTaskStore.getState().moveTask(moving.id, '2026-04-07')
+    expect(useTaskStore.getState().tasks[moving.id].isFocus).toBe(true)
   })
 })
 
