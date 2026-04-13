@@ -41,7 +41,7 @@ function DialogContent({ className, children, onOpenAutoFocus, ...props }: React
         {...props}
       >
         {children}
-        <DialogPrimitive.Close className="absolute top-4 right-4 text-[var(--color-black-40)] hover:text-[var(--color-black)] transition-colors">
+        <DialogPrimitive.Close className="absolute top-3 right-3 cursor-pointer flex items-center justify-center size-6 rounded text-[var(--color-black-40)] hover:text-[var(--color-black)] transition-colors">
           <X size={16} />
           <span className="sr-only">Close</span>
         </DialogPrimitive.Close>

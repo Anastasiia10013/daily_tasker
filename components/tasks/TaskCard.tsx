@@ -66,7 +66,7 @@ export function TaskCard({ task, onEdit, onDelete, onStatusChange, onToggleFocus
         <div
           role="button"
           aria-label="Toggle focus"
-          className={`flex items-center gap-1.5 ${focusMuted ? 'cursor-default' : 'cursor-pointer'}`}
+          className={`flex items-center gap-1.5 min-h-6 min-w-6 ${focusMuted ? 'cursor-default' : 'cursor-pointer'}`}
           onClick={e => { e.stopPropagation(); onToggleFocus(task.id) }}
           onPointerDown={e => e.stopPropagation()}
         >
@@ -89,7 +89,7 @@ export function TaskCard({ task, onEdit, onDelete, onStatusChange, onToggleFocus
 
         <button
           aria-label="Delete task"
-          className="ml-auto flex-shrink-0 text-[var(--color-black-40)] hover:text-[var(--color-red)] transition-colors"
+          className="ml-auto flex-shrink-0 cursor-pointer flex items-center justify-center size-6 text-[var(--color-black-40)] hover:text-[var(--color-red)] transition-colors"
           onClick={e => { e.stopPropagation(); onDelete(task.id) }}
           onPointerDown={e => e.stopPropagation()}
         >

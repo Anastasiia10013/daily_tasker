@@ -32,7 +32,7 @@ export function StatusDropdown({ taskId, status, onStatusChange }: StatusDropdow
     <DropdownMenu>
       <DropdownMenuTrigger
         onClick={e => e.stopPropagation()}
-        className={`flex items-center gap-1.5 text-xs font-medium outline-none ${STATUS_TEXT_CLASS[status]}`}
+        className={`flex cursor-pointer items-center gap-1.5 text-xs font-medium outline-none min-h-6 ${STATUS_TEXT_CLASS[status]}`}
       >
         <span className={`inline-block size-1.5 rounded-full ${STATUS_DOT_CLASS[status]}`} />
         {STATUS_LABELS[status]}
