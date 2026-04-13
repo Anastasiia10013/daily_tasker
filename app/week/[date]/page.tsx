@@ -3,6 +3,7 @@ import { getMonday, getWeekDates, formatWeekLabel } from '@/lib/utils/dates'
 import { WeekNav } from '@/components/ui/WeekNav'
 import { WeekBoard } from '@/components/board/WeekBoard'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
+import { ExportButton } from '@/components/ui/ExportButton'
 
 export default async function WeekPage(props: PageProps<'/week/[date]'>) {
   const { date } = await props.params
@@ -32,6 +33,7 @@ export default async function WeekPage(props: PageProps<'/week/[date]'>) {
             prevHref={`/week/${prevMonday}`}
             nextHref={`/week/${nextMonday}`}
           />
+          <ExportButton />
           <ThemeToggle />
         </div>
       </header>
