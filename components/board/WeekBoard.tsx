@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import {
   DndContext,
   DragOverlay,
@@ -16,7 +16,8 @@ import {
 } from '@dnd-kit/core'
 import { DayColumn } from './DayColumn'
 import { useTaskStore } from '@/lib/store/taskStore'
-import { useShallow } from 'zustand/react/shallow'
+import { getDemoTasks } from '@/lib/demo/demoData'
+import { getWeekDates } from '@/lib/utils/dates'
 import { BORDER_CLASS } from '@/components/tasks/TaskCard'
 import type { Task } from '@/types'
 
@@ -29,9 +30,16 @@ export function WeekBoard({ dates, monday }: WeekBoardProps) {
   const [mounted, setMounted] = useState(false)
   useEffect(() => setMounted(true), [])
 
-  const tasks = useTaskStore(useShallow(s => s.getTasksForWeek(monday)))
+  const allTasks = useTaskStore(s => s.tasks)
+  const isDemoMode = useTaskStore(s => s.isDemoMode)
   const reorderTask = useTaskStore(s => s.reorderTask)
   const moveTask = useTaskStore(s => s.moveTask)
+
+  const tasks = useMemo(() => {
+    if (isDemoMode) return getDemoTasks(monday)
+    const weekDates = new Set(getWeekDates(monday))
+    return Object.values(allTasks).filter(t => weekDates.has(t.date))
+  }, [allTasks, isDemoMode, monday])
 
   const [activeTask, setActiveTask] = useState<Task | null>(null)
   const [hoveredDate, setHoveredDate] = useState<string | null>(null)
@@ -46,10 +54,12 @@ export function WeekBoard({ dates, monday }: WeekBoardProps) {
   )
 
   const handleDragStart = ({ active }: DragStartEvent) => {
+    if (isDemoMode) return
     setActiveTask(tasks.find(t => t.id === active.id) ?? null)
   }
 
   const handleDragOver = ({ over }: DragOverEvent) => {
+    if (isDemoMode) return
     if (!over) { setHoveredDate(null); return }
     const overId = over.id as string
     const overTask = tasks.find(t => t.id === overId)
@@ -59,6 +69,7 @@ export function WeekBoard({ dates, monday }: WeekBoardProps) {
   const handleDragEnd = ({ active, over }: DragEndEvent) => {
     setActiveTask(null)
     setHoveredDate(null)
+    if (isDemoMode) return
     if (!over || active.id === over.id) return
 
     const activeId = active.id as string
@@ -120,4 +131,3 @@ export function WeekBoard({ dates, monday }: WeekBoardProps) {
     </DndContext>
   )
 }
-

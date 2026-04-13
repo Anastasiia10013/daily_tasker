@@ -1,9 +1,10 @@
-"use client"
+'use client'
 
 import { Crosshair, Trash2 } from 'lucide-react'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { StatusDropdown } from './StatusDropdown'
+import { useTaskStore } from '@/lib/store/taskStore'
 import type { Task, TaskStatus } from '@/types'
 
 function getTilt(id: string): string {
@@ -30,6 +31,8 @@ interface TaskCardProps {
 }
 
 export function TaskCard({ task, onEdit, onDelete, onStatusChange, onToggleFocus, focusLimitReached }: TaskCardProps) {
+  const isDemoMode = useTaskStore(s => s.isDemoMode)
+
   const {
     attributes,
     listeners,
@@ -37,7 +40,7 @@ export function TaskCard({ task, onEdit, onDelete, onStatusChange, onToggleFocus
     transform,
     transition,
     isDragging,
-  } = useSortable({ id: task.id })
+  } = useSortable({ id: task.id, disabled: isDemoMode })
 
   const variant = task.isFocus ? 'focus' : task.status
   const focusMuted = !task.isFocus && focusLimitReached
@@ -51,66 +54,68 @@ export function TaskCard({ task, onEdit, onDelete, onStatusChange, onToggleFocus
     <div
       ref={setNodeRef}
       {...attributes}
-      {...listeners}
+      {...(isDemoMode ? {} : listeners)}
       style={dragStyle}
       className={isDragging ? 'opacity-30' : undefined}
     >
-    <div
-      data-testid="task-card"
-      className={`bg-white rounded-[var(--border-radius)] p-4 cursor-grab active:cursor-grabbing task-card ${BORDER_CLASS[variant]} ${task.status === 'done' ? 'opacity-50' : ''}`}
-      style={{ '--tilt': getTilt(task.id) } as React.CSSProperties}
-      onClick={() => onEdit(task)}
-    >
-      {/* Top row: [crosshair + badge] [delete] */}
-      <div className="flex items-center gap-2 mb-2">
-        <div
-          role="button"
-          aria-label="Toggle focus"
-          className={`flex items-center gap-1.5 min-h-6 min-w-6 ${focusMuted ? 'cursor-default' : 'cursor-pointer'}`}
-          onClick={e => { e.stopPropagation(); onToggleFocus(task.id) }}
-          onPointerDown={e => e.stopPropagation()}
-        >
-          <Crosshair
-            size={14}
-            className={`flex-shrink-0 transition-colors ${
-              task.isFocus
-                ? 'text-[var(--color-yellow)]'
-                : focusMuted
-                  ? 'text-[var(--color-black-10)]'
-                  : 'text-[var(--color-black-40)]'
-            }`}
-          />
-          {task.isFocus && (
-            <span className="bg-[var(--color-yellow)] text-[var(--color-black)] text-xs font-bold px-2 py-0.5 rounded">
-              Focus
-            </span>
+      <div
+        data-testid="task-card"
+        className={`bg-white rounded-[var(--border-radius)] p-4 task-card ${BORDER_CLASS[variant]} ${task.status === 'done' ? 'opacity-50' : ''} ${isDemoMode ? 'cursor-default' : 'cursor-grab active:cursor-grabbing'}`}
+        style={{ '--tilt': getTilt(task.id) } as React.CSSProperties}
+        onClick={isDemoMode ? undefined : () => onEdit(task)}
+      >
+        {/* Top row: [crosshair + badge] [delete] */}
+        <div className="flex items-center gap-2 mb-2">
+          <div
+            role={isDemoMode ? undefined : 'button'}
+            aria-label={isDemoMode ? undefined : 'Toggle focus'}
+            className={`flex items-center gap-1.5 min-h-6 min-w-6 ${isDemoMode || focusMuted ? 'cursor-default' : 'cursor-pointer'}`}
+            onClick={isDemoMode ? undefined : (e => { e.stopPropagation(); onToggleFocus(task.id) })}
+            onPointerDown={isDemoMode ? undefined : (e => e.stopPropagation())}
+          >
+            <Crosshair
+              size={14}
+              className={`flex-shrink-0 transition-colors ${
+                task.isFocus
+                  ? 'text-[var(--color-yellow)]'
+                  : focusMuted
+                    ? 'text-[var(--color-black-10)]'
+                    : 'text-[var(--color-black-40)]'
+              }`}
+            />
+            {task.isFocus && (
+              <span className="bg-[var(--color-yellow)] text-[var(--color-black)] text-xs font-bold px-2 py-0.5 rounded">
+                Focus
+              </span>
+            )}
+          </div>
+
+          {!isDemoMode && (
+            <button
+              aria-label="Delete task"
+              className="ml-auto flex-shrink-0 cursor-pointer flex items-center justify-center size-6 text-[var(--color-black-40)] hover:text-[var(--color-red)] transition-colors"
+              onClick={e => { e.stopPropagation(); onDelete(task.id) }}
+              onPointerDown={e => e.stopPropagation()}
+            >
+              <Trash2 size={14} />
+            </button>
           )}
         </div>
 
-        <button
-          aria-label="Delete task"
-          className="ml-auto flex-shrink-0 cursor-pointer flex items-center justify-center size-6 text-[var(--color-black-40)] hover:text-[var(--color-red)] transition-colors"
-          onClick={e => { e.stopPropagation(); onDelete(task.id) }}
-          onPointerDown={e => e.stopPropagation()}
-        >
-          <Trash2 size={14} />
-        </button>
-      </div>
-
-      <p className={`font-medium text-[var(--color-black)] break-words ${task.status === 'done' ? 'line-through' : ''}`}>
-        {task.title}
-      </p>
-
-      {task.description && (
-        <p data-testid="task-description" className="text-sm text-[var(--color-black-60)] mt-1 truncate">
-          {task.description}
+        <p className={`font-medium text-[var(--color-black)] break-words ${task.status === 'done' ? 'line-through' : ''}`}>
+          {task.title}
         </p>
-      )}
 
-      <div className="mt-2" onClick={e => e.stopPropagation()} onPointerDown={e => e.stopPropagation()}>
-        <StatusDropdown taskId={task.id} status={task.status} onStatusChange={onStatusChange} />
+        {task.description && (
+          <p data-testid="task-description" className="text-sm text-[var(--color-black-60)] mt-1 truncate">
+            {task.description}
+          </p>
+        )}
+
+        <div className="mt-2" onClick={e => e.stopPropagation()} onPointerDown={e => e.stopPropagation()}>
+          <StatusDropdown taskId={task.id} status={task.status} onStatusChange={onStatusChange} />
+        </div>
       </div>
     </div>
-  </div>
   )
 }

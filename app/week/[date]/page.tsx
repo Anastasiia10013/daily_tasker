@@ -4,12 +4,13 @@ import { WeekNav } from '@/components/ui/WeekNav'
 import { WeekBoard } from '@/components/board/WeekBoard'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
 import { ExportButton } from '@/components/ui/ExportButton'
+import { DemoBanner } from '@/components/ui/DemoBanner'
+import { TryDemoButton } from '@/components/ui/TryDemoButton'
 
 export default async function WeekPage(props: PageProps<'/week/[date]'>) {
   const { date } = await props.params
   const monday = getMonday(date)
 
-  // Redirect if date is not a Monday (invalid or mid-week URL)
   if (monday !== date) {
     redirect(`/week/${monday}`)
   }
@@ -34,9 +35,11 @@ export default async function WeekPage(props: PageProps<'/week/[date]'>) {
             nextHref={`/week/${nextMonday}`}
           />
           <ExportButton />
+          <TryDemoButton />
           <ThemeToggle />
         </div>
       </header>
+      <DemoBanner />
       <WeekBoard dates={weekDates} monday={monday} />
     </div>
   )

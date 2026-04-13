@@ -30,6 +30,7 @@ export function DayColumn({ date, tasks, isDropTarget = false }: DayColumnProps)
   const [focusErrorTaskId, setFocusErrorTaskId] = useState<string | null>(null)
 
   const { deleteTask, updateTask, toggleFocus } = useTaskStore()
+  const isDemoMode = useTaskStore(s => s.isDemoMode)
   const { setNodeRef } = useDroppable({ id: date })
 
   const focusCount = tasks.filter(t => t.isFocus).length
@@ -55,7 +56,7 @@ export function DayColumn({ date, tasks, isDropTarget = false }: DayColumnProps)
 
   return (
     <div ref={setNodeRef} className={`flex flex-col flex-1 min-w-[180px] max-w-[240px] rounded-[var(--border-radius)] transition-colors duration-150 ${isDropTarget ? 'bg-[var(--color-black-10)]/40' : ''}`}>
-      <DayHeader dayName={dayName} date={shortDate} onAdd={handleAdd} />
+      <DayHeader dayName={dayName} date={shortDate} onAdd={isDemoMode ? undefined : handleAdd} />
       <SortableContext items={sorted.map(t => t.id)} strategy={verticalListSortingStrategy}>
         <div className="flex flex-col gap-2 pt-2 flex-1">
           {sorted.map((task, i) => (

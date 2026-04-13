@@ -13,14 +13,16 @@ export function DayHeader({ dayName, date, onAdd }: DayHeaderProps) {
         <span className="font-bold text-foreground">{dayName}</span>
         <span className="text-sm text-muted-foreground ml-2">{date}</span>
       </div>
-      <button
-        onClick={onAdd}
-        aria-label="Add task"
-        className="flex cursor-pointer items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors duration-[var(--duration-default)]"
-      >
-        <Plus size={20} />
-        Add task
-      </button>
+      {onAdd && (
+        <button
+          onClick={onAdd}
+          aria-label="Add task"
+          className="flex cursor-pointer items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors duration-[var(--duration-default)]"
+        >
+          <Plus size={20} />
+          Add task
+        </button>
+      )}
     </div>
   )
 }
