@@ -14,7 +14,7 @@ export function DemoBanner() {
       style={{ backgroundColor: 'var(--color-sage-green)' }}
     >
       <span className="font-medium text-[var(--color-black)]">
-        <strong>Demo Mode</strong> — You&apos;re viewing sample data. Your tasks are untouched.
+        <strong>Demo Mode </strong>— You&apos;re viewing sample data. Your tasks are untouched.
       </span>
       <button
         onClick={exitDemoMode}

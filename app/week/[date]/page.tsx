@@ -27,7 +27,10 @@ export default async function WeekPage(props: PageProps<'/week/[date]'>) {
   return (
     <div className="flex flex-col flex-1">
       <header className="flex items-center justify-between px-4 py-3 border-b border-[var(--color-black-10)]">
-        <h1 className="text-lg font-bold text-foreground">Daily Tasker</h1>
+        <div className="flex items-center gap-5">
+          <h1 className="text-lg font-bold text-foreground">Daily Tasker</h1>
+          <TryDemoButton />
+        </div>
         <div className="flex items-center gap-4">
           <WeekNav
             label={label}
@@ -35,7 +38,6 @@ export default async function WeekPage(props: PageProps<'/week/[date]'>) {
             nextHref={`/week/${nextMonday}`}
           />
           <ExportButton />
-          <TryDemoButton />
           <ThemeToggle />
         </div>
       </header>
