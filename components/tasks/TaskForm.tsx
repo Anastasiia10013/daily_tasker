@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Checkbox } from '@/components/ui/checkbox'
 import { useTaskStore } from '@/lib/store/taskStore'
+import { MarkdownViewer } from '@/components/tasks/MarkdownViewer'
 import type { Task, TaskStatus } from '@/types'
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
@@ -31,6 +32,7 @@ export function TaskForm({ open, onClose, date, editTask, focusLimitReached = fa
 
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
+  const [descriptionTab, setDescriptionTab] = useState<'edit' | 'preview'>('edit')
   const [status, setStatus] = useState<TaskStatus>('todo')
   const [isFocus, setIsFocus] = useState(false)
   const [focusFormError, setFocusFormError] = useState(false)
@@ -54,6 +56,7 @@ export function TaskForm({ open, onClose, date, editTask, focusLimitReached = fa
       setSelectedDate(date)
     }
     setFocusFormError(false)
+    setDescriptionTab('edit')
   }, [editTask, open, date])
 
   const handleFocusChange = (checked: boolean) => {
@@ -158,14 +161,55 @@ export function TaskForm({ open, onClose, date, editTask, focusLimitReached = fa
           </div>
 
           <div>
-            <Label htmlFor="task-description">Description</Label>
-            <Textarea
-              id="task-description"
-              value={description}
-              onChange={e => setDescription(e.target.value)}
-              placeholder="Optional description"
-              className="mt-1"
-            />
+            <div className="flex items-center justify-between">
+              <Label htmlFor="task-description">Description</Label>
+              <div className="flex text-xs rounded-md border border-input overflow-hidden">
+                <button
+                  type="button"
+                  onClick={() => setDescriptionTab('edit')}
+                  className={`px-2.5 py-1 transition-colors cursor-pointer ${
+                    descriptionTab === 'edit'
+                      ? 'bg-[var(--color-black)] text-white'
+                      : 'text-[var(--color-black-60)] hover:text-[var(--color-black)]'
+                  }`}
+                >
+                  Edit
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setDescriptionTab('preview')}
+                  className={`px-2.5 py-1 transition-colors cursor-pointer border-l border-input ${
+                    descriptionTab === 'preview'
+                      ? 'bg-[var(--color-black)] text-white'
+                      : 'text-[var(--color-black-60)] hover:text-[var(--color-black)]'
+                  }`}
+                >
+                  Preview
+                </button>
+              </div>
+            </div>
+            {descriptionTab === 'edit' ? (
+              <>
+                <Textarea
+                  id="task-description"
+                  value={description}
+                  onChange={e => setDescription(e.target.value)}
+                  placeholder="Optional description"
+                  className="mt-1 min-h-24 font-mono text-sm"
+                />
+                <p className="mt-1 text-[11px] text-[var(--color-black-40)] font-mono leading-relaxed">
+                  {'- [ ] todo  - [x] done  **bold**  _italic_  `code`'}
+                </p>
+              </>
+            ) : (
+              <div className="mt-1 min-h-24 rounded-md border border-input px-3 py-2">
+                {description.trim() ? (
+                  <MarkdownViewer content={description} />
+                ) : (
+                  <p className="text-sm text-[var(--color-black-40)]">Nothing to preview</p>
+                )}
+              </div>
+            )}
           </div>
 
           <div>
