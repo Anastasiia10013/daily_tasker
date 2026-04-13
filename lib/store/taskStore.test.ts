@@ -265,6 +265,43 @@ describe('moveTask', () => {
   })
 })
 
+// ─── demo mode ────────────────────────────────────────────────────────────
+
+describe('demo mode', () => {
+  beforeEach(() => {
+    useTaskStore.setState({ tasks: {}, isDemoMode: false })
+  })
+
+  it('isDemoMode defaults to false', () => {
+    expect(useTaskStore.getState().isDemoMode).toBe(false)
+  })
+
+  it('enterDemoMode sets isDemoMode to true', () => {
+    useTaskStore.getState().enterDemoMode()
+    expect(useTaskStore.getState().isDemoMode).toBe(true)
+  })
+
+  it('exitDemoMode sets isDemoMode to false', () => {
+    useTaskStore.getState().enterDemoMode()
+    useTaskStore.getState().exitDemoMode()
+    expect(useTaskStore.getState().isDemoMode).toBe(false)
+  })
+
+  it('getTasksForWeek returns demo tasks (demo- ids) when isDemoMode is true', () => {
+    useTaskStore.getState().addTask({ title: 'Real', status: 'todo', isFocus: false, date: '2026-04-14' })
+    useTaskStore.getState().enterDemoMode()
+    const tasks = useTaskStore.getState().getTasksForWeek('2026-04-14')
+    expect(tasks.length).toBeGreaterThan(0)
+    expect(tasks.every(t => t.id.startsWith('demo-'))).toBe(true)
+  })
+
+  it('getTasksForWeek returns real tasks when isDemoMode is false', () => {
+    useTaskStore.getState().addTask({ title: 'Real', status: 'todo', isFocus: false, date: '2026-04-14' })
+    const tasks = useTaskStore.getState().getTasksForWeek('2026-04-14')
+    expect(tasks.some(t => t.title === 'Real')).toBe(true)
+  })
+})
+
 // ─── getTasksForWeek ───────────────────────────────────────────────────────
 
 describe('getTasksForWeek', () => {

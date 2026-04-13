@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import type { Task, TaskStatus } from '@/types'
 import { getWeekDates } from '@/lib/utils/dates'
+import { getDemoTasks } from '@/lib/demo/demoData'
 
 type AddTaskInput = {
   title: string
@@ -13,6 +14,7 @@ type AddTaskInput = {
 
 type TaskStore = {
   tasks: Record<string, Task>
+  isDemoMode: boolean
   addTask: (input: AddTaskInput) => void
   updateTask: (id: string, changes: Partial<Pick<Task, 'title' | 'description' | 'status' | 'isFocus' | 'date'>>) => void
   deleteTask: (id: string) => void
@@ -20,12 +22,15 @@ type TaskStore = {
   reorderTask: (date: string, activeId: string, overId: string) => void
   moveTask: (id: string, newDate: string) => void
   getTasksForWeek: (monday: string) => Task[]
+  enterDemoMode: () => void
+  exitDemoMode: () => void
 }
 
 export const useTaskStore = create<TaskStore>()(
   persist(
     (set, get) => ({
       tasks: {},
+      isDemoMode: false,
 
       addTask: (input) => {
         const tasksForDate = Object.values(get().tasks).filter(t => t.date === input.date)
@@ -116,10 +121,17 @@ export const useTaskStore = create<TaskStore>()(
       },
 
       getTasksForWeek: (monday) => {
+        if (get().isDemoMode) return getDemoTasks(monday)
         const weekDates = new Set(getWeekDates(monday))
         return Object.values(get().tasks).filter(t => weekDates.has(t.date))
       },
+
+      enterDemoMode: () => set({ isDemoMode: true }),
+      exitDemoMode: () => set({ isDemoMode: false }),
     }),
-    { name: 'daily-tasker-tasks' }
+    {
+      name: 'daily-tasker-tasks',
+      partialize: (state) => ({ tasks: state.tasks }),
+    }
   )
 )
