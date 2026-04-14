@@ -9,9 +9,11 @@ export function ThemeToggle() {
 
   useEffect(() => setMounted(true), [])
 
-  if (!mounted) return null
-
   const isDark = theme === 'dark'
+
+  if (!mounted) {
+    return <div className="h-6 w-11" aria-hidden />
+  }
 
   return (
     <button
