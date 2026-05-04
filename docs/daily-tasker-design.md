@@ -121,9 +121,6 @@ In `toggleFocus` store action — count focus tasks for that date, block if alre
 
 ## Design System
 
-### Inspiration
-Cards Against Humanity — minimal, bold, typographic. White cards that always pop against the background.
-
 ### Color Tokens
 ```css
 --color-blue: #3051a8;

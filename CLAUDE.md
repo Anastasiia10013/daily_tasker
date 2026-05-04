@@ -22,11 +22,28 @@ npm run lint     # ESLint
 ```
 
 ```bash
-npx vitest run     # unit tests
-npx playwright test  # e2e tests
+npx vitest run                                         # unit tests (all)
+npx vitest run components/board/DayColumn.test.tsx     # single unit test file
+npx playwright test                                    # e2e tests (all, auto-starts dev server)
+npx playwright test e2e/board.spec.ts                  # single e2e spec
 ```
 
 ## Architecture
+
+**Directory layout:**
+```
+app/week/[date]/   — dynamic weekly board route (Monday of the week)
+components/board/  — WeekBoard, DayColumn, DayHeader + co-located *.test.tsx files
+components/tasks/  — TaskCard, TaskForm, StatusDropdown + co-located *.test.tsx files
+components/ui/     — Shadcn-generated primitives (do not hand-edit)
+lib/store/         — Zustand taskStore + tests
+lib/hooks/         — useTheme
+lib/utils/         — dates, tasks helpers
+lib/demo/          — demo mode data generator
+e2e/               — Playwright specs
+```
+
+Unit tests are co-located with source files (`*.test.ts/tsx` beside the file they test).
 
 **Routing:** App Router only — routes are directories under `app/`. Each route can export a default Server Component plus optional `layout.tsx`, `loading.tsx`, `error.tsx`.
 
@@ -50,18 +67,18 @@ Weekly Kanban task board — personal use + portfolio. Full spec: `docs/daily-ta
 
 ### Decisions
 
-| Concern | Decision |
-|---|---|
-| Storage | localStorage via Zustand `persist` middleware |
-| Data layer | `useTaskStore` hook — UI never touches localStorage directly |
-| Week navigation | URL-based `/week/YYYY-MM-DD` (Monday of the week) |
-| State management | Zustand |
-| Drag-and-drop | `@dnd-kit/core` |
-| Focus tasks | Regular tasks pinned to top, max 3 per day |
-| UI library | Tailwind v4 + Shadcn |
-| Theme | Dark/light toggle, persisted in localStorage |
-| Unit testing | Vitest |
-| E2E testing | Playwright |
+| Concern          | Decision                                                     |
+|------------------|--------------------------------------------------------------|
+| Storage          | localStorage via Zustand `persist` middleware                |
+| Data layer       | `useTaskStore` hook — UI never touches localStorage directly |
+| Week navigation  | URL-based `/week/YYYY-MM-DD` (Monday of the week)            |
+| State management | Zustand                                                      |
+| Drag-and-drop    | `@dnd-kit/core`                                              |
+| Focus tasks      | Regular tasks pinned to top, max 3 per day                   |
+| UI library       | Tailwind v4 + Shadcn                                         |
+| Theme            | Dark/light toggle, persisted in localStorage                 |
+| Unit testing     | Vitest                                                       |
+| E2E testing      | Playwright                                                   |
 
 ### Data Model
 
@@ -89,6 +106,7 @@ type Task = {
 - **14** — inline/compact: icons inside task cards (action buttons, indicators)
 - **20** — standard: header controls, column-level buttons (add task, nav chevrons, etc.)
 
-### Additional rulles
+### Additional rules
 1. After implementing each milestone group changes by logic to 2-3 commits, write commit title and concise structured description with bullets
 2. Implement milestones in inline session, do not suggest and use subagents and worktrees for implementing milestones
+3. Markdown tables must have columns padded to equal width — each cell padded with trailing spaces so all rows align as a grid in a monospace editor. Separator dashes equal `column_max_length + 2`.

@@ -43,5 +43,8 @@ next-env.d.ts
 # worktrees
 .worktrees/
 
+# claude code local settings
+.claude/
+
 # playwright mcp artifacts
 .playwright-mcp/
