@@ -10,7 +10,7 @@ export function DemoBanner() {
 
   return (
     <div
-      className="flex items-center justify-center gap-4 px-4 py-2 text-sm"
+      className="flex flex-col sm:flex-row sm:items-center sm:justify-center gap-2 sm:gap-4 px-4 py-3 sm:py-2 text-sm"
       style={{ backgroundColor: 'var(--color-sage-green)' }}
     >
       <span className="font-medium text-[var(--color-black)]">
