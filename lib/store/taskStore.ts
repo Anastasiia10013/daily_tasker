@@ -3,6 +3,7 @@ import { persist } from 'zustand/middleware'
 import type { Task, TaskStatus } from '@/types'
 import { getWeekDates } from '@/lib/utils/dates'
 import { getDemoTasks } from '@/lib/demo/demoData'
+import { uuid } from '@/lib/utils/uuid'
 
 type AddTaskInput = {
   title: string
@@ -38,7 +39,7 @@ export const useTaskStore = create<TaskStore>()(
           ? Math.max(...tasksForDate.map(t => t.order))
           : -1
         const task: Task = {
-          id: crypto.randomUUID(),
+          id: uuid(),
           ...input,
           order: maxOrder + 1,
           createdAt: new Date().toISOString(),
