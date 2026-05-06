@@ -7,6 +7,7 @@ import {
   closestCenter,
   pointerWithin,
   PointerSensor,
+  TouchSensor,
   useSensor,
   useSensors,
   type DragStartEvent,
@@ -52,7 +53,8 @@ export function WeekBoard({ dates, monday }: WeekBoardProps) {
   }
 
   const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 8 } })
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
+    useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 5 } }),
   )
 
   const handleDragStart = ({ active }: DragStartEvent) => {

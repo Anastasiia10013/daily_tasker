@@ -48,6 +48,8 @@ export function TaskCard({ task, onEdit, onDelete, onStatusChange, onToggleFocus
   const dragStyle = {
     transform: CSS.Transform.toString(transform),
     transition,
+    touchAction: isDemoMode ? undefined : 'none',
+    WebkitTouchCallout: 'none',
   } as React.CSSProperties
 
   return (
@@ -56,7 +58,7 @@ export function TaskCard({ task, onEdit, onDelete, onStatusChange, onToggleFocus
       {...attributes}
       {...(isDemoMode ? {} : listeners)}
       style={dragStyle}
-      className={isDragging ? 'opacity-30' : undefined}
+      className={`select-none ${isDragging ? 'opacity-30' : ''}`}
     >
       <div
         data-testid="task-card"
