@@ -134,14 +134,14 @@ test('navigates to previous and next week via header arrows', async ({ page }) =
   await page.waitForURL(/\/week\/(\d{4}-\d{2}-\d{2})/)
 
   const initialUrl = page.url()
-  const initialDate = initialUrl.match(/\/week\/(\d{4}-\d{2}-\d{2})/)?.[1]!
+  const initialDate = initialUrl.match(/\/week\/(\d{4}-\d{2}-\d{2})/)![1]
 
   // Navigate to next week — wait for URL to actually change
   await page.getByRole('link', { name: 'Next week' }).click()
   await page.waitForURL(url => url.href.includes('/week/') && !url.href.includes(initialDate))
 
   const nextUrl = page.url()
-  const nextDate = nextUrl.match(/\/week\/(\d{4}-\d{2}-\d{2})/)?.[1]!
+  const nextDate = nextUrl.match(/\/week\/(\d{4}-\d{2}-\d{2})/)![1]
 
   // nextDate should be 7 days after initialDate
   const diff =

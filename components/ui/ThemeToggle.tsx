@@ -7,6 +7,8 @@ export function ThemeToggle() {
   const [mounted, setMounted] = useState(false)
   const { theme, setTheme } = useTheme()
 
+  // next-themes hydration guard: render placeholder on server, real toggle after mount.
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => setMounted(true), [])
 
   const isDark = theme === 'dark'

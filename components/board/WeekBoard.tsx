@@ -28,6 +28,8 @@ interface WeekBoardProps {
 
 export function WeekBoard({ dates, monday }: WeekBoardProps) {
   const [mounted, setMounted] = useState(false)
+  // Hydration guard for Zustand persist — render placeholder on server, real state after mount.
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => setMounted(true), [])
 
   const allTasks = useTaskStore(s => s.tasks)

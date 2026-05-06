@@ -41,6 +41,8 @@ export function TaskForm({ open, onClose, date, editTask, focusLimitReached = fa
   // Checkbox is blocked when limit is reached and this task isn't already a focus task
   const focusCheckboxBlocked = focusLimitReached && !(editTask?.isFocus === true)
 
+  // Resets form fields when the editTask prop changes (open dialog, switch task).
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     if (editTask) {
       setTitle(editTask.title)
@@ -58,6 +60,7 @@ export function TaskForm({ open, onClose, date, editTask, focusLimitReached = fa
     setFocusFormError(false)
     setDescriptionTab('edit')
   }, [editTask, open, date])
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   const handleFocusChange = (checked: boolean) => {
     if (checked && focusCheckboxBlocked) {

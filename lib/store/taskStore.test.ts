@@ -178,7 +178,7 @@ describe('reorderTask', () => {
     store.addTask({ title: 'A', status: 'todo', isFocus: false, date: '2026-04-06' })
     store.addTask({ title: 'B', status: 'todo', isFocus: false, date: '2026-04-06' })
     store.addTask({ title: 'C', status: 'todo', isFocus: false, date: '2026-04-06' })
-    const [a, b, c] = Object.values(useTaskStore.getState().tasks).sort((x, y) => x.order - y.order)
+    const [a, , c] = Object.values(useTaskStore.getState().tasks).sort((x, y) => x.order - y.order)
     useTaskStore.getState().reorderTask('2026-04-06', c.id, a.id) // move C before A
     const reordered = Object.values(useTaskStore.getState().tasks).sort((x, y) => x.order - y.order)
     expect(reordered.map(t => t.title)).toEqual(['C', 'A', 'B'])
