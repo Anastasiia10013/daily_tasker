@@ -57,7 +57,6 @@ Unit tests are co-located with source files (`*.test.ts/tsx` beside the file the
 - `params` in page/layout components is now a `Promise` — always `await params`
 - Use `PageProps<'/week/[date]'>` and `LayoutProps<'/dashboard'>` as global type helpers (no import needed)
 - `redirect()` from `next/navigation` works directly in Server Components
-- Add `loading.tsx` to dynamic routes for instant navigation feel
 
 ---
 
