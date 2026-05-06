@@ -6,7 +6,7 @@ const cache = new Map<string, Task[]>()
 export function getDemoTasks(monday: string): Task[] {
   if (cache.has(monday)) return cache.get(monday)!
   const d = getWeekDates(monday)
-  return [
+  const tasks: Task[] = [
     {
       id: 'demo-1',
       title: 'Review project requirements',
