@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from 'react'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -106,6 +106,9 @@ export function TaskForm({ open, onClose, date, editTask, focusLimitReached = fa
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{editTask ? 'Edit task' : 'Add task'}</DialogTitle>
+          <DialogDescription className="sr-only">
+            {editTask ? 'Edit the details of an existing task.' : 'Create a new task with a title, date, and optional description.'}
+          </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4">
