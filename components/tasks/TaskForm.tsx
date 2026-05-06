@@ -122,7 +122,8 @@ export function TaskForm({ open, onClose, date, editTask, focusLimitReached = fa
                   setSelectedDate(d.toISOString().slice(0, 10))
                 }}
               >
-                ← Prev week
+                <span className="sm:hidden">←</span>
+                <span className="hidden sm:inline">← Prev week</span>
               </Button>
               <div className="relative flex-1">
                 <div className="h-9 rounded-md border border-input bg-transparent px-3 py-1 text-sm flex items-center justify-between pointer-events-none">
@@ -147,7 +148,8 @@ export function TaskForm({ open, onClose, date, editTask, focusLimitReached = fa
                   setSelectedDate(d.toISOString().slice(0, 10))
                 }}
               >
-                Next week →
+                <span className="sm:hidden">→</span>
+                <span className="hidden sm:inline">Next week →</span>
               </Button>
             </div>
           </div>
