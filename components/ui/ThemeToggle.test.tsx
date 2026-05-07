@@ -17,12 +17,12 @@ beforeEach(() => {
 
 test('renders with aria-pressed false by default', () => {
   renderWithTheme()
-  expect(screen.getByRole('button', { name: /toggle theme/i })).toHaveAttribute('aria-pressed', 'false')
+  expect(screen.getByRole('button', { name: /switch to (dark|light) theme/i })).toHaveAttribute('aria-pressed', 'false')
 })
 
 test('sets aria-pressed true and saves dark to localStorage on click', () => {
   renderWithTheme()
-  const button = screen.getByRole('button', { name: /toggle theme/i })
+  const button = screen.getByRole('button', { name: /switch to (dark|light) theme/i })
   fireEvent.click(button)
   expect(button).toHaveAttribute('aria-pressed', 'true')
   expect(localStorage.getItem('theme')).toBe('dark')
@@ -30,7 +30,7 @@ test('sets aria-pressed true and saves dark to localStorage on click', () => {
 
 test('toggles back to light and saves light to localStorage on second click', () => {
   renderWithTheme()
-  const button = screen.getByRole('button', { name: /toggle theme/i })
+  const button = screen.getByRole('button', { name: /switch to (dark|light) theme/i })
   fireEvent.click(button)
   fireEvent.click(button)
   expect(button).toHaveAttribute('aria-pressed', 'false')

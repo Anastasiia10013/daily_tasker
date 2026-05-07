@@ -27,7 +27,7 @@ export function ThemeToggle() {
     >
       <span className="relative inline-flex h-7 w-[52px] items-center rounded-full bg-[var(--color-black-10)] transition-colors duration-[var(--duration-default)] dark:bg-[var(--color-black-60)]">
         <span
-          className="absolute top-[3px] left-0 h-[22px] w-[22px] rounded-full bg-[var(--card)] shadow-sm transition-transform duration-[var(--duration-default)]"
+          className="absolute top-[3px] left-0 h-[22px] w-[22px] rounded-full bg-card shadow-sm transition-transform duration-[var(--duration-default)]"
           style={{ transform: `translateX(${isDark ? 27 : 3}px)` }}
           aria-hidden
         />

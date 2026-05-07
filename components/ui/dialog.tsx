@@ -35,13 +35,13 @@ function DialogContent({ className, children, onOpenAutoFocus, ...props }: React
         data-slot="dialog-content"
         onOpenAutoFocus={onOpenAutoFocus ?? ((e) => e.preventDefault())}
         className={cn(
-          "fixed top-1/2 left-1/2 z-50 w-full max-w-md -translate-x-1/2 -translate-y-1/2 rounded-[var(--border-radius-large)] bg-white p-6 text-[var(--color-black)] shadow-lg [color-scheme:light]",
+          "fixed top-1/2 left-1/2 z-50 w-full max-w-md -translate-x-1/2 -translate-y-1/2 rounded-[var(--border-radius-large)] bg-card p-6 text-card-foreground shadow-lg",
           className
         )}
         {...props}
       >
         {children}
-        <DialogPrimitive.Close className="absolute top-3 right-3 cursor-pointer flex items-center justify-center size-6 rounded text-[var(--color-black-40)] hover:text-[var(--color-black)] transition-colors">
+        <DialogPrimitive.Close className="absolute top-3 right-3 cursor-pointer flex items-center justify-center size-6 rounded text-muted-foreground hover:text-foreground transition-colors">
           <X size={20} />
           <span className="sr-only">Close</span>
         </DialogPrimitive.Close>
@@ -62,7 +62,7 @@ function DialogTitle({ className, ...props }: React.ComponentProps<typeof Dialog
   return (
     <DialogPrimitive.Title
       data-slot="dialog-title"
-      className={cn("text-lg font-bold text-[var(--color-black)]", className)}
+      className={cn("text-lg font-bold text-foreground", className)}
       {...props}
     />
   )
@@ -72,7 +72,7 @@ function DialogDescription({ className, ...props }: React.ComponentProps<typeof 
   return (
     <DialogPrimitive.Description
       data-slot="dialog-description"
-      className={cn("text-sm text-[var(--color-black-60)]", className)}
+      className={cn("text-sm text-muted-foreground", className)}
       {...props}
     />
   )

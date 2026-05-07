@@ -38,23 +38,23 @@ const CARDS: CardData[] = [
 
 const BORDER_CLASS: Record<CardVariant, string> = {
   focus: 'border-2 border-[var(--color-yellow)]',
-  todo: 'border border-[var(--color-black-10)]',
-  'in-progress': 'border border-[var(--color-black-10)] border-l-4 border-l-[var(--color-sage-green)]',
-  done: 'border border-[var(--color-black-10)]',
+  todo: 'border border-border',
+  'in-progress': 'border border-border border-l-4 border-l-[var(--color-sage-green)]',
+  done: 'border border-border',
 }
 
 const STATUS_DOT_CLASS: Record<CardVariant, string> = {
-  focus: 'bg-[var(--color-black-40)]',
-  todo: 'bg-[var(--color-black-40)]',
+  focus: 'bg-muted-foreground',
+  todo: 'bg-muted-foreground',
   'in-progress': 'bg-[var(--color-sage-green)]',
-  done: 'bg-[var(--color-black-40)]',
+  done: 'bg-muted-foreground',
 }
 
 const STATUS_TEXT_CLASS: Record<CardVariant, string> = {
-  focus: 'text-[var(--color-black-40)]',
-  todo: 'text-[var(--color-black-40)]',
+  focus: 'text-muted-foreground',
+  todo: 'text-muted-foreground',
   'in-progress': 'text-[var(--color-sage-green)]',
-  done: 'text-[var(--color-black-40)]',
+  done: 'text-muted-foreground',
 }
 
 const STATUS_LABEL: Record<CardVariant, string> = {
@@ -70,7 +70,7 @@ function TaskCard({ variant, title, description, tilt }: CardData) {
 
   return (
     <div
-      className={`bg-white rounded-[var(--border-radius)] p-4 cursor-grab task-card ${BORDER_CLASS[variant]} ${isDone ? 'opacity-50' : ''}`}
+      className={`bg-card rounded-[var(--border-radius)] p-4 cursor-grab task-card ${BORDER_CLASS[variant]} ${isDone ? 'opacity-50' : ''}`}
       style={{ '--tilt': tilt } as React.CSSProperties}
     >
       {/* Top row: crosshair + focus badge | delete */}
@@ -78,7 +78,7 @@ function TaskCard({ variant, title, description, tilt }: CardData) {
         <div className="flex items-center gap-1.5 min-h-6 min-w-6">
           <Crosshair
             size={14}
-            className={`flex-shrink-0 ${isFocus ? 'text-[var(--color-yellow)]' : 'text-[var(--color-black-40)]'}`}
+            className={`flex-shrink-0 ${isFocus ? 'text-[var(--color-yellow)]' : 'text-muted-foreground'}`}
           />
           {isFocus && (
             <span className="bg-[var(--color-yellow)] text-[var(--color-black)] text-xs font-bold px-2 py-0.5 rounded">
@@ -86,16 +86,16 @@ function TaskCard({ variant, title, description, tilt }: CardData) {
             </span>
           )}
         </div>
-        <div className="ml-auto flex-shrink-0 flex items-center justify-center size-6 text-[var(--color-black-40)]">
+        <div className="ml-auto flex-shrink-0 flex items-center justify-center size-6 text-muted-foreground">
           <Trash2 size={14} />
         </div>
       </div>
 
-      <p className={`font-medium text-[var(--color-black)] ${isDone ? 'line-through' : ''}`}>
+      <p className={`font-medium text-card-foreground ${isDone ? 'line-through' : ''}`}>
         {title}
       </p>
 
-      <p className="text-sm text-[var(--color-black-60)] mt-1 truncate">{description}</p>
+      <p className="text-sm text-muted-foreground mt-1 truncate">{description}</p>
 
       <div className="mt-2">
         <span className={`flex items-center gap-1.5 text-xs font-medium ${STATUS_TEXT_CLASS[variant]}`}>
