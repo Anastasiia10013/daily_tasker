@@ -73,7 +73,7 @@ Weekly Kanban task board — personal use + portfolio. Full spec: `docs/daily-ta
 | Week navigation  | URL-based `/week/YYYY-MM-DD` (Monday of the week)            |
 | State management | Zustand                                                      |
 | Drag-and-drop    | `@dnd-kit/core`                                              |
-| Focus tasks      | Regular tasks pinned to top, max 3 per day                   |
+| Focus tasks      | Visual flag with yellow accent, max 3 per day (not pinned)   |
 | UI library       | Tailwind v4 + Shadcn                                         |
 | Theme            | Dark/light toggle, persisted in localStorage                 |
 | Unit testing     | Vitest                                                       |
@@ -97,9 +97,15 @@ type Task = {
 ```
 
 ### Sort Order (within each day column)
-1. Focus tasks (`isFocus: true`) — top, yellow accent
-2. Active tasks (`todo` | `in-progress`) — middle
-3. Done tasks — always sink to bottom
+1. Active tasks (`todo` | `in-progress`) — top, sorted by `order`
+2. Done tasks — always sink to bottom, sorted by `order`
+
+Focus tasks (`isFocus: true`) sit at their `order` position **within the active zone** and are marked with a yellow accent — they are not auto-pinned. This keeps the visual position of every card aligned with its `order` value, so drag-and-drop reorders and cross-day moves stay unambiguous. `reorderTask` operates within a single zone (active or done) and `moveTask` strips `isFocus` if the destination day already has 3 focus tasks.
+
+### Environment-coupled gotchas
+
+- **`loading.tsx` is for routes that wait on server data.** This app's data lives in localStorage so there is no wait — `loading.tsx` would just flash a skeleton on every navigation. Re-introduce it if storage moves server-side.
+- **`allowedDevOrigins` in `next.config.ts` is hard-coded to a specific LAN IP.** Update it when your dev machine's IP changes (new network, new device) or HMR will fail with a WebSocket error when accessing the dev server via LAN.
 
 ### Icon Sizes
 - **14** — inline/compact: icons inside task cards (action buttons, indicators)
