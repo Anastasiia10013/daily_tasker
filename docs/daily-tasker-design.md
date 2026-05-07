@@ -8,18 +8,18 @@ Weekly Kanban-style task management app. Personal use + portfolio showcase. 7 co
 
 ## Decisions
 
-| Concern | Decision |
-|---|---|
-| Storage | localStorage via Zustand `persist` middleware |
-| Data layer | `useTaskStore` hook — UI never touches localStorage directly |
-| Week navigation | URL-based `/week/YYYY-MM-DD` (Monday of the week) |
-| State management | Zustand |
-| Drag-and-drop | `@dnd-kit/core` |
-| Focus tasks | Regular tasks pinned to top, max 3 per day |
-| UI library | Tailwind v4 + Shadcn |
-| Theme | Dark/light toggle, persisted in localStorage |
-| Unit testing | Vitest |
-| E2E testing | Playwright |
+| Concern          | Decision                                                     |
+|------------------|--------------------------------------------------------------|
+| Storage          | localStorage via Zustand `persist` middleware                |
+| Data layer       | `useTaskStore` hook — UI never touches localStorage directly |
+| Week navigation  | URL-based `/week/YYYY-MM-DD` (Monday of the week)            |
+| State management | Zustand                                                      |
+| Drag-and-drop    | `@dnd-kit/core`                                              |
+| Focus tasks      | Regular tasks pinned to top, max 3 per day                   |
+| UI library       | Tailwind v4 + Shadcn                                         |
+| Theme            | Dark/light toggle, persisted in localStorage                 |
+| Unit testing     | Vitest                                                       |
+| E2E testing      | Playwright                                                   |
 
 ---
 
@@ -143,13 +143,13 @@ In `toggleFocus` store action — count focus tasks for that date, block if alre
 ```
 
 ### Theme Mapping
-| Token | Light mode | Dark mode |
-|---|---|---|
-| Background | `--color-off-white` (#f2f0e9) | `--color-black` (#141212) |
-| Card background | `--color-white` (#ffffff) | `--color-white` (#ffffff) |
-| Primary text | `--color-black` (#141212) | `--color-black` (#141212) |
-| Secondary text | `--color-black-60` (#5b5959) | `--color-black-60` (#5b5959) |
-| Borders | `--color-black-10` (#d0d0d0) | `--color-black-10` (#d0d0d0) |
+| Token           | Light mode                    | Dark mode                    |
+|-----------------|-------------------------------|------------------------------|
+| Background      | `--color-off-white` (#f2f0e9) | `--color-black` (#141212)    |
+| Card background | `--color-white` (#ffffff)     | `--color-white` (#ffffff)    |
+| Primary text    | `--color-black` (#141212)     | `--color-black` (#141212)    |
+| Secondary text  | `--color-black-60` (#5b5959)  | `--color-black-60` (#5b5959) |
+| Borders         | `--color-black-10` (#d0d0d0)  | `--color-black-10` (#d0d0d0) |
 
 Cards are always white — the background creates the contrast.
 
@@ -174,18 +174,18 @@ font-feature-settings: "ss02" on
 
 ## Milestones
 
-| # | Milestone | Key output |
-|---|---|---|
-| M0 | Setup | CLAUDE.md, README, design tokens, Shadcn, Zustand, dnd-kit |
-| M1 | Style Guide | `/style-guide` page — all tokens, components, card variants |
-| M2 | Data Layer | types, Zustand store, utils, Vitest unit tests |
-| M3 | Routing | `/` redirect, `/week/[date]`, WeekNav |
-| M4 | Board Skeleton | WeekBoard + 7 DayColumns, static tasks |
-| M5 | Task CRUD | TaskCard, TaskForm, store wired, localStorage working |
-| M6 | Focus Tasks | toggleFocus, 3-task limit, yellow accent |
-| M7 | Drag & Drop | dnd-kit, reorder within column (done-boundary enforced), move between days (focus-strip if needed) |
-| M8 | Theme | dark/light toggle, persisted |
-| M9 | E2E Tests | Playwright, 6 key user flows |
+| #  | Milestone      | Key output                                                                                         |
+|----|----------------|----------------------------------------------------------------------------------------------------|
+| M0 | Setup          | CLAUDE.md, README, design tokens, Shadcn, Zustand, dnd-kit                                         |
+| M1 | Style Guide    | `/style-guide` page — all tokens, components, card variants                                        |
+| M2 | Data Layer     | types, Zustand store, utils, Vitest unit tests                                                     |
+| M3 | Routing        | `/` redirect, `/week/[date]`, WeekNav                                                              |
+| M4 | Board Skeleton | WeekBoard + 7 DayColumns, static tasks                                                             |
+| M5 | Task CRUD      | TaskCard, TaskForm, store wired, localStorage working                                              |
+| M6 | Focus Tasks    | toggleFocus, 3-task limit, yellow accent                                                           |
+| M7 | Drag & Drop    | dnd-kit, reorder within column (done-boundary enforced), move between days (focus-strip if needed) |
+| M8 | Theme          | dark/light toggle, persisted                                                                       |
+| M9 | E2E Tests      | Playwright, 6 key user flows                                                                       |
 
 ---
 
