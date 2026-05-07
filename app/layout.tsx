@@ -12,13 +12,14 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://daily-tasker-app.vercel.app"),
   title: "Daily Tasker",
   description: "Weekly Kanban task board for planning your week.",
   openGraph: {
     title: "Daily Tasker",
     description: "Weekly Kanban task board for planning your week.",
     type: "website",
-    images: ["https://daily-tasker.vercel.app/og.png"],
+    images: ["/og.png"],
   },
 };
 
