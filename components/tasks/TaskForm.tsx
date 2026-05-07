@@ -177,8 +177,8 @@ export function TaskForm({ open, onClose, date, editTask, focusLimitReached = fa
                   onClick={() => setDescriptionTab('edit')}
                   className={`px-2.5 py-1 transition-colors cursor-pointer ${
                     descriptionTab === 'edit'
-                      ? 'bg-[var(--color-black)] text-white'
-                      : 'text-[var(--color-black-60)] hover:text-[var(--color-black)]'
+                      ? 'bg-primary text-primary-foreground'
+                      : 'text-muted-foreground hover:text-foreground'
                   }`}
                 >
                   Edit
@@ -188,8 +188,8 @@ export function TaskForm({ open, onClose, date, editTask, focusLimitReached = fa
                   onClick={() => setDescriptionTab('preview')}
                   className={`px-2.5 py-1 transition-colors cursor-pointer border-l border-input ${
                     descriptionTab === 'preview'
-                      ? 'bg-[var(--color-black)] text-white'
-                      : 'text-[var(--color-black-60)] hover:text-[var(--color-black)]'
+                      ? 'bg-primary text-primary-foreground'
+                      : 'text-muted-foreground hover:text-foreground'
                   }`}
                 >
                   Preview

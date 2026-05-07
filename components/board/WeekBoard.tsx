@@ -118,14 +118,14 @@ export function WeekBoard({ dates, monday }: WeekBoardProps) {
       <DragOverlay>
         {activeTask && (
           <div
-            className={`bg-white rounded-[var(--border-radius)] p-4 task-card ${BORDER_CLASS[activeTask.isFocus ? 'focus' : activeTask.status]} ${activeTask.status === 'done' ? 'opacity-50' : ''} shadow-lg`}
+            className={`bg-card rounded-[var(--border-radius)] p-4 task-card ${BORDER_CLASS[activeTask.isFocus ? 'focus' : activeTask.status]} ${activeTask.status === 'done' ? 'opacity-50' : ''} shadow-lg`}
             style={{ transform: 'rotate(1deg)' }}
           >
-            <p className={`font-medium text-[var(--color-black)] break-words ${activeTask.status === 'done' ? 'line-through' : ''}`}>
+            <p className={`font-medium text-card-foreground break-words ${activeTask.status === 'done' ? 'line-through' : ''}`}>
               {activeTask.title}
             </p>
             {activeTask.description && (
-              <p className="text-sm text-[var(--color-black-60)] mt-1 truncate">
+              <p className="text-sm text-muted-foreground mt-1 truncate">
                 {activeTask.description}
               </p>
             )}

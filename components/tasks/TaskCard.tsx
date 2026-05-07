@@ -16,9 +16,9 @@ function getTilt(id: string): string {
 
 export const BORDER_CLASS: Record<string, string> = {
   focus: 'border-2 border-[var(--color-yellow)]',
-  todo: 'border border-[var(--color-black-10)]',
-  'in-progress': 'border border-[var(--color-black-10)] border-l-4 border-l-[var(--color-sage-green)]',
-  done: 'border border-[var(--color-black-10)]',
+  todo: 'border border-border',
+  'in-progress': 'border border-border border-l-4 border-l-[var(--color-sage-green)]',
+  done: 'border border-border',
 }
 
 interface TaskCardProps {
@@ -62,7 +62,7 @@ export function TaskCard({ task, onEdit, onDelete, onStatusChange, onToggleFocus
     >
       <div
         data-testid="task-card"
-        className={`bg-white rounded-[var(--border-radius)] p-4 task-card ${BORDER_CLASS[variant]} ${task.status === 'done' ? 'opacity-50' : ''} ${isDemoMode ? 'cursor-default' : 'cursor-grab active:cursor-grabbing'}`}
+        className={`bg-card rounded-[var(--border-radius)] p-4 task-card ${BORDER_CLASS[variant]} ${task.status === 'done' ? 'opacity-50' : ''} ${isDemoMode ? 'cursor-default' : 'cursor-grab active:cursor-grabbing'}`}
         style={{ '--tilt': getTilt(task.id) } as React.CSSProperties}
         onClick={isDemoMode ? undefined : () => onEdit(task)}
       >
@@ -81,8 +81,8 @@ export function TaskCard({ task, onEdit, onDelete, onStatusChange, onToggleFocus
                 task.isFocus
                   ? 'text-[var(--color-yellow)]'
                   : focusMuted
-                    ? 'text-[var(--color-black-10)]'
-                    : 'text-[var(--color-black-40)]'
+                    ? 'text-border'
+                    : 'text-muted-foreground'
               }`}
             />
             {task.isFocus && (
@@ -95,7 +95,7 @@ export function TaskCard({ task, onEdit, onDelete, onStatusChange, onToggleFocus
           {!isDemoMode && (
             <button
               aria-label="Delete task"
-              className="ml-auto flex-shrink-0 cursor-pointer flex items-center justify-center size-6 text-[var(--color-black-40)] hover:text-[var(--color-red)] transition-colors"
+              className="ml-auto flex-shrink-0 cursor-pointer flex items-center justify-center size-6 text-muted-foreground hover:text-[var(--color-red)] transition-colors"
               onClick={e => { e.stopPropagation(); onDelete(task.id) }}
               onPointerDown={e => e.stopPropagation()}
             >
@@ -104,12 +104,12 @@ export function TaskCard({ task, onEdit, onDelete, onStatusChange, onToggleFocus
           )}
         </div>
 
-        <p className={`font-medium text-[var(--color-black)] break-words ${task.status === 'done' ? 'line-through' : ''}`}>
+        <p className={`font-medium text-card-foreground break-words ${task.status === 'done' ? 'line-through' : ''}`}>
           {task.title}
         </p>
 
         {task.description && (
-          <p data-testid="task-description" className="text-sm text-[var(--color-black-60)] mt-1 truncate">
+          <p data-testid="task-description" className="text-sm text-muted-foreground mt-1 truncate">
             {task.description}
           </p>
         )}

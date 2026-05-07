@@ -113,6 +113,15 @@ export default function StyleGuidePage() {
         </div>
       </Section>
 
+      <Section id="theme-toggle" title="Theme Toggle">
+        <div className="flex items-center gap-4">
+          <ThemeToggle />
+          <p className="text-xs text-muted-foreground">
+            Click to switch themes — the highlighted icon shows the active theme.
+          </p>
+        </div>
+      </Section>
+
       <Section id="task-form" title="Task Form">
         <TaskFormPreview />
       </Section>

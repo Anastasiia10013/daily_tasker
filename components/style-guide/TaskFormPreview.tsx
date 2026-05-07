@@ -7,7 +7,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 
 export function TaskFormPreview() {
   return (
-    <div className="bg-white rounded-[var(--border-radius-large)] p-6 max-w-md border border-[var(--color-black-10)] text-[var(--color-black)] [color-scheme:light]">
+    <div className="bg-card rounded-[var(--border-radius-large)] p-6 max-w-md border border-border text-card-foreground">
       <h3 className="text-lg font-bold mb-4">Add task</h3>
       <div className="space-y-4 pointer-events-none">
         <div>
