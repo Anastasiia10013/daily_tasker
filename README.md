@@ -14,6 +14,7 @@ A weekly Kanban-style task board for planning your week. Built as a personal-use
 
 ## Stack
 
+| Layer       | Tool                               |
 |-------------|------------------------------------|
 | Framework   | Next.js 16 (App Router)            |
 | Language    | TypeScript                         |
