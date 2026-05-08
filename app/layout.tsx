@@ -19,7 +19,6 @@ export const metadata: Metadata = {
     title: "Daily Tasker",
     description: "Weekly Kanban task board for planning your week.",
     type: "website",
-    images: ["/og.png"],
   },
 };
 
